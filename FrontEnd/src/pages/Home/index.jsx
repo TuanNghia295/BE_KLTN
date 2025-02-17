@@ -54,9 +54,8 @@ export default function Home() {
                     </Tabs>
             </div>
           </div>
+          <ProductsSlider items={5} />
         </div>
-
-        <ProductsSlider />
       </section>
 
       <section className='py-16 bg-white '>

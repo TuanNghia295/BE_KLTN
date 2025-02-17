@@ -1,0 +1,5 @@
+.productsSlider .swiper-wrapper {
+    padding : 15px !important;
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+}

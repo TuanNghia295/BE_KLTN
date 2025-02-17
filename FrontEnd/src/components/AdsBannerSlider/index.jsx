@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import BannerBox from '../BannerBox';
-
+import Adsbanner1 from "../../assets/ads-banner/adsbanner1.png"
 const AdsBannerSlider = (props) => {
   return (
     <div className='w-full py-5'>
@@ -17,7 +17,7 @@ const AdsBannerSlider = (props) => {
           loop={true}
         >
           <SwiperSlide>
-            <BannerBox img="https://i.pinimg.com/originals/05/8c/a5/058ca55eae5b86fa8a4d52c1d1e5a4a4.jpg" link={'/login'}></BannerBox>
+            <BannerBox img={Adsbanner1} link={'/login'}></BannerBox>
           </SwiperSlide>
           
           <SwiperSlide>
