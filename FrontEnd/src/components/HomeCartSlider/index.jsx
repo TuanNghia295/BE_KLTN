@@ -10,7 +10,7 @@ import { Navigation } from 'swiper/modules';
 
 const HomeCartSlider = () => {
   return (
-    <div className="home-cart-slider">
+    <div className="home-cart-slider mt-5 mb-5">
       <div className="container">
         <Swiper
           slidesPerView={4}

@@ -34,3 +34,11 @@ nav ul button {
 nav ul button:hover {
     background: none !important;
 }
+
+.MuiTabs-indicator {
+    background-color: #ff5252 !important;
+}
+
+.MuiTab-textColorPrimary {
+    color: #ff5252 !important;
+}
