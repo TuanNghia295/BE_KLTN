@@ -6,9 +6,11 @@ import { MdDiscount } from 'react-icons/md';
 import CategoryPannel from './CategoryPannel';
 import { useState } from 'react';
 import '../Navigation/style.css';
+
 const Navigation = () => {
   const [isOpenCategory, setIsOpenCategory] = useState(false);
   const toogleCategory = () => setIsOpenCategory(!isOpenCategory);
+
   return (
     <>
       <nav className="py-2">
@@ -41,65 +43,63 @@ const Navigation = () => {
                 opacity-0  transition-all duration-300"
                 >
                   <ul>
-                    <Link to={'/men'}>
-                      <li className="list-none w-full relative">
+                    <li className="list-none w-full relative">
+                      <Link to={'/men'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Men</Button>
+                      </Link>
 
-                        {/* inner menu */}
-                        <div
-                          className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white shadow-md 
+                      {/* inner menu */}
+                      <div
+                        className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white shadow-md 
                 opacity-0  transition-all duration-300"
-                        >
-                          <ul>
+                      >
+                        <ul>
+                          <li className="list-none w-full">
                             <Link to={'/men'}>
-                              <li className="list-none w-full">
-                                <Button className="!text-textPrimary w-full !justify-start !rounded-none">
-                                  T-Shirt
-                                </Button>
-                              </li>
+                              <Button className="!text-textPrimary w-full !justify-start !rounded-none">T-Shirt</Button>
                             </Link>
+                          </li>
 
+                          <li className="list-none w-full">
                             <Link to={'/women'}>
-                              <li className="list-none w-full">
-                                <Button className="!text-textPrimary w-full !justify-start !rounded-none">Jeans</Button>
-                              </li>
+                              <Button className="!text-textPrimary w-full !justify-start !rounded-none">Jeans</Button>
                             </Link>
+                          </li>
 
+                          <li className="list-none w-full">
                             <Link to={'/children'}>
-                              <li className="list-none w-full">
-                                <Button className="!text-textPrimary w-full !justify-start !rounded-none">
-                                  Footwear
-                                </Button>
-                              </li>
+                              <Button className="!text-textPrimary w-full !justify-start !rounded-none">
+                                Footwear
+                              </Button>
                             </Link>
+                          </li>
 
+                          <li className="list-none w-full">
                             <Link to={'/other'}>
-                              <li className="list-none w-full">
-                                <Button className="!text-textPrimary w-full !justify-start !rounded-none">Watch</Button>
-                              </li>
+                              <Button className="!text-textPrimary w-full !justify-start !rounded-none">Watch</Button>
                             </Link>
-                          </ul>
-                        </div>
-                      </li>
-                    </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
 
-                    <Link to={'/women'}>
-                      <li className="list-none w-full">
+                    <li className="list-none w-full">
+                      <Link to={'/women'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Women</Button>
-                      </li>
-                    </Link>
+                      </Link>
+                    </li>
 
-                    <Link to={'/children'}>
-                      <li className="list-none w-full">
+                    <li className="list-none w-full">
+                      <Link to={'/children'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Kids</Button>
-                      </li>
-                    </Link>
+                      </Link>
+                    </li>
 
-                    <Link to={'/other'}>
-                      <li className="list-none w-full">
+                    <li className="list-none w-full">
+                      <Link to={'/other'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Other</Button>
-                      </li>
-                    </Link>
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -141,7 +141,7 @@ const Navigation = () => {
               </li>
 
               <li className="list-none">
-                <Link to={'/jewllery'} className="link transition text-[16px] font-[500]">
+                <Link to={'/jewellery'} className="link transition text-[16px] font-[500]">
                   <Button className="link transition font-[500] hover:!text-primary">Jewellery</Button>
                 </Link>
               </li>
