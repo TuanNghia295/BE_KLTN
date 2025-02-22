@@ -48,16 +48,16 @@ export default function Home() {
       <section className="bg-white py-8">
         <div className="container">
           <div className="flex items-center justify-between">
-            <div className="leftSec">
+            <div className="leftSec w-[30%]">
               <h2 className="text-[20px] font-[600]">Popular Products</h2>
             </div>
 
-            <div className="rightSec ">
+            <div className="rightSec ml-auto w-[20%]">
               <Tabs
                 value={value}
                 onChange={handleChange}
                 variant="standard"
-                scrollButtons="auto"
+                scrollButtons="block"
                 aria-label="scrollable auto tabs example"
               >
                 <Tab label="Fashion" />

@@ -14,7 +14,7 @@ const Navigation = () => {
   return (
     <>
       <nav>
-        <div className="container flex items-center justify-start gap-8">
+        <div className="container hidden xl:flex items-center justify-start gap-8">
           <div className="col_1 w-[16%]">
             <Button
               className="!text-white gap-2 !bg-black w-full cursor-pointer hover:!bg-gray1"

@@ -8,6 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Favorite from '@mui/icons-material/Favorite';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Navigation from './Navigation';
+import { IoMdMenu } from "react-icons/io";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -73,7 +74,7 @@ export default function Header() {
           <div className="col3 w-[30%] flex items-center pl-7">
             <ul className="flex items-center justify-end gap-3 w-full">
               {/* Đăng nhập */}
-              <li className="list-none">
+              <li className="list-none hidden xl:block">
                 <Link to={'/login'} className="link transition text-[14px] font-[500]">
                   Sign In
                 </Link>
@@ -82,7 +83,16 @@ export default function Header() {
                   Sign Up
                 </Link>
               </li>
-
+              {/*Menu Responsive*/}
+              <li className='xl:hidden'>
+                <StyledEngineProvider injectFirst>
+                  <CustomTooltip title="Menu">
+                    <IconButton aria-label="cart">
+                        <IoMdMenu style={{ color: '#000' }} />
+                    </IconButton>
+                  </CustomTooltip>
+                </StyledEngineProvider>
+              </li>
               {/* Giỏ hàng */}
               <li>
                 <StyledEngineProvider injectFirst>
