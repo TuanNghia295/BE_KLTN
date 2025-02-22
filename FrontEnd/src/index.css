@@ -16,7 +16,7 @@ body {
 }
 
 .container {
-    width: 95%;
+    /* width: 95%; */
     margin: auto;
 }
 
@@ -36,10 +36,9 @@ nav ul button:hover {
 }
 
 .MuiTabs-indicator {
-    background-color: #ff5252 !important;
+    background-color: black !important;
 }
 
 .MuiTab-textColorPrimary {
-    color: #ff5252 !important;
+    color: black !important;
 }
-

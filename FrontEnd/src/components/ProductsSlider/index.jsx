@@ -13,12 +13,24 @@ const ProductsSlider = (props) => {
       <div className="container">
         <Swiper
           slidesPerView={props.items}
-          spaceBetween={10}
+          spaceBetween={20}
           navigation={true}
           modules={[Navigation]}
           className="productSlide"
           loop={true}
         >
+          <SwiperSlide>
+            <ProductItem />
+          </SwiperSlide>
+
+          <SwiperSlide>
+            <ProductItem />
+          </SwiperSlide>
+
+          <SwiperSlide>
+            <ProductItem />
+          </SwiperSlide>
+
           <SwiperSlide>
             <ProductItem />
           </SwiperSlide>

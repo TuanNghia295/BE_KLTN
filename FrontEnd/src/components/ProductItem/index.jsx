@@ -22,9 +22,6 @@ const ProductItem = () => {
             />
           </div>
         </Link>
-        <span className="discount flex items-center absolute top-[10px] left-[10px] z-50 bg-primary text-white p-2 rounded-md ">
-          -10%
-        </span>
 
         <div className="actions absolute transition-all duration-1000 top-[-200px] group-hover:top-[15px] right-[0px] z-50 flex items-center gap-2 flex-col w-[50px] opacity-0 group-hover:opacity-100">
           <Tooltip title="Add" placement="left-start">
@@ -54,8 +51,7 @@ const ProductItem = () => {
         </h3>
 
         <div className="flex items-center gap-4">
-          <span className="oldPrice line-through font-light">$58.00</span>
-          <span className="newPrice text-primary font-bold">$50.00</span>
+          <span className="newPrice text-black text-[18px]">5.000.000đ</span>
         </div>
       </div>
     </div>

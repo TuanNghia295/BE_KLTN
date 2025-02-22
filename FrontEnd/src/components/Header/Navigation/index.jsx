@@ -13,7 +13,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="py-2">
+      <nav>
         <div className="container flex items-center justify-start gap-8">
           <div className="col_1 w-[16%]">
             <Button
@@ -26,16 +26,16 @@ const Navigation = () => {
 
           {/* Điều hướng chính */}
           <div className="col_2 w-[65%]">
-            <ul className="flex items-center gap-5 nav">
+            <ul className="flex items-center justify-center gap-5 nav">
               <li className="list-none">
                 <Link to={'/'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Home</Button>
+                  <Button className="link transition font-[500] hover:!text-primary !py-4">Home</Button>
                 </Link>
               </li>
 
               <li className="list-none relative">
                 <Link to={'/fashion'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Fashion</Button>
+                  <Button className="link transition font-[500] hover:!text-primary !py-4">Fashion</Button>
                 </Link>
 
                 <div
@@ -105,44 +105,20 @@ const Navigation = () => {
               </li>
 
               <li className="list-none">
-                <Link to={'/electronics'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Electronics</Button>
-                </Link>
-              </li>
-
-              <li className="list-none">
-                <Link to={'/bags'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Bags</Button>
-                </Link>
-              </li>
-
-              <li className="list-none">
                 <Link to={'/footwear'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Footwear</Button>
-                </Link>
-              </li>
-
-              <li className="list-none">
-                <Link to={'/croceries'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Croceries</Button>
-                </Link>
-              </li>
-
-              <li className="list-none">
-                <Link to={'/beauty'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Beauty</Button>
-                </Link>
-              </li>
-
-              <li className="list-none">
-                <Link to={'/wellness'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Wellness</Button>
+                  <Button className="link transition font-[500] hover:!text-primary !py-4">Footwear</Button>
                 </Link>
               </li>
 
               <li className="list-none">
                 <Link to={'/jewellery'} className="link transition text-[16px] font-[500]">
-                  <Button className="link transition font-[500] hover:!text-primary">Jewellery</Button>
+                  <Button className="link transition font-[500] hover:!text-primary !py-4">Jewellery</Button>
+                </Link>
+              </li>
+
+              <li className="list-none">
+                <Link to={'/jewellery'} className="link transition text-[16px] font-[500]">
+                  <Button className="link transition font-[500] hover:!text-primary !py-4">Sale</Button>
                 </Link>
               </li>
             </ul>

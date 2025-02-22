@@ -1,8 +1,8 @@
 .swiper-button-next,
 .swiper-button-prev {
-    color: #000;
+    color: #fff;
     /* Màu của nút */
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.5);
     /* Màu nền của nút */
     border-radius: 50%;
     /* Bo tròn nút */
@@ -21,7 +21,7 @@
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 0.8);
     /* Màu nền khi hover */
 }
 
