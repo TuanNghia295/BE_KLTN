@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Favorite from '@mui/icons-material/Favorite';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Navigation from './Navigation';
-import { IoMdMenu } from "react-icons/io";
+import { IoMdMenu } from 'react-icons/io';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -60,9 +60,9 @@ export default function Header() {
       <div className="header py-3 border-b-[1px] border-b-[1px] border-gray-250">
         <div className="container flex items-center justify-between">
           {/* logo */}
-          <div className="col1 w-[25%]">
-            <Link to={'/'} className="width-[20%]">
-              <img src={logoWhiteTheme} alt="Logo" width={'30%'} height={'30%'} />
+          <div className="col1 w-[25%] flex justify-center items-center">
+            <Link to={'/'} className="w-full">
+              <img src={logoWhiteTheme} alt="Logo" className="w-1/2 md:w-1/3 lg:w-1/4 object-contain" />
             </Link>
           </div>
 
@@ -84,11 +84,11 @@ export default function Header() {
                 </Link>
               </li>
               {/*Menu Responsive*/}
-              <li className='xl:hidden'>
+              <li className="xl:hidden">
                 <StyledEngineProvider injectFirst>
                   <CustomTooltip title="Menu">
                     <IconButton aria-label="cart">
-                        <IoMdMenu style={{ color: '#000' }} />
+                      <IoMdMenu style={{ color: '#000' }} />
                     </IconButton>
                   </CustomTooltip>
                 </StyledEngineProvider>

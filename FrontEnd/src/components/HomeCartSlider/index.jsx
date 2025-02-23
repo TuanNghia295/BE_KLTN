@@ -8,12 +8,12 @@ import './style.css'; // Import tệp CSS tùy chỉnh
 import { Link } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 
-const HomeCartSlider = () => {
+const HomeCartSlider = ({ slidesPerView }) => {
   return (
     <div className="home-cart-slider mt-5 mb-5">
       <div className="container">
         <Swiper
-          slidesPerView={4}
+          slidesPerView={slidesPerView}
           spaceBetween={0}
           navigation={true}
           modules={[Navigation]}

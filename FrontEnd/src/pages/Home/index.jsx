@@ -1,7 +1,5 @@
 import React from 'react';
 import HomeSlider from '../../components/HomeSlider';
-import { LiaShippingFastSolid } from 'react-icons/lia';
-import AdsBannerSlider from '../../components/AdsBannerSlider';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ProductsSlider from '../../components/ProductsSlider';
@@ -10,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Pagination, Autoplay } from 'swiper/modules';
 import BlogItem from '../../components/BlogItem';
-import HomeCartSlider from '../../components/HomeCartSlider';
 import Banner2 from '../../assets/banner/banner2.jpg';
 import Banner3 from '../../assets/banner/banner3.jpg';
 import { Button } from '@mui/material';
@@ -52,7 +49,7 @@ export default function Home() {
               <h2 className="text-[20px] font-[600]">Popular Products</h2>
             </div>
 
-            <div className="rightSec ml-auto w-[20%]">
+            <div className="rightSec">
               <Tabs
                 value={value}
                 onChange={handleChange}
