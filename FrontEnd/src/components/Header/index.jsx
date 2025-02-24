@@ -9,6 +9,8 @@ import Favorite from '@mui/icons-material/Favorite';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Navigation from './Navigation';
 import { IoMdMenu } from 'react-icons/io';
+import { useContext } from 'react';
+import { MyContext } from '../../App';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -27,6 +29,8 @@ const CustomTooltip = styled(({ className, ...props }) => <Tooltip {...props} cl
 });
 
 export default function Header() {
+  const context = useContext(MyContext);
+
   return (
     <header className="bg-white">
       {/* Phần trên của header chính. Tạm gọi là affix header */}
@@ -97,7 +101,7 @@ export default function Header() {
               <li>
                 <StyledEngineProvider injectFirst>
                   <CustomTooltip title="Giỏ hàng">
-                    <IconButton aria-label="cart">
+                    <IconButton aria-label="cart" onClick={() => context.setOpenCartPanel(true)}>
                       <StyledBadge badgeContent={4} color="error">
                         <ShoppingCartIcon style={{ color: '#000' }} />
                       </StyledBadge>

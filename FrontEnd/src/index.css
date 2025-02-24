@@ -8,6 +8,19 @@
     box-sizing: border-box;
 }
 
+body::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  
+body::-webkit-scrollbar-thumb {
+    background-color: #000;
+}
+  
+body::-webkit-scrollbar-track {
+    background: #fff;
+}
+
 body {
     font-family: "Roboto", serif;
     font-optical-sizing: auto;
@@ -41,4 +54,8 @@ nav ul button:hover {
 
 .MuiTab-textColorPrimary {
     color: black !important;
+}
+
+.cartPanel .MuiPaper-root {
+    width:500px;
 }

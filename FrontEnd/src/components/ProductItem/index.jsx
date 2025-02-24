@@ -10,7 +10,7 @@ const ProductItem = () => {
   return (
     <div className="productItem rounded-md w-[100%] overflow-hidden bg-white text-black shadow-lg relative">
       <div className="group imgWrapper overflow-hidden rounded-none relative">
-        <Link to="/">
+        <Link to="/product/2">
           <div className="img h-[250px] overflow-hidden">
             <img
               src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.3/h_466,c_limit/dab259aa-dbc3-4c18-85e8-38dababbed92/dunk-low-retro-shoes-Xhh8kc.png"
