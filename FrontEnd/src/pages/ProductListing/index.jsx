@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import SlideBar from '../../components/SlideBar';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import '../ProductListing/style.css'
 import ProductItem from '../../components/ProductItem'
 import ProductItemListView from '../../components/ProductItemListView'
@@ -29,15 +29,15 @@ const ProductListing = () => {
     <section className='py-5'>
         <div className='container !text-center'>
                 <Breadcrumbs className='flex w-full justify-center' aria-label="breadcrumb">
-                    <Link underline="hover" color="inherit" href="/">
-                        NIKE
+                    <Link underline="hover" color="inherit" to="/">
+                        Home
                     </Link>
                     <Link
                     underline="hover"
                     color="inherit"
-                    href="/material-ui/getting-started/installation/"
+                    to="/productListing"
                     >
-                        Core
+                        ProductListing
                     </Link>
                     <Typography sx={{ color: 'text.primary' }}>Breadcrumbs</Typography>
                 </Breadcrumbs>
