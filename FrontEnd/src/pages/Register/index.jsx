@@ -14,8 +14,8 @@ const Register = () => {
     const [isShowPassword,setIsShowPassword] = useState(true);
 
   return (
-    <section className='section py-10 '>
-        <div className='container flex xl:bg-white xl:shadow-md'>
+    <section className='section py-10 xl:py-0'>
+        <div className='container-fuild flex xl:bg-white xl:shadow-md'>
             <div className='hidden xl:block relative'>
                 <img src={Banner1} />
                 <div className='absolute bg-black opacity-90 w-full h-full top-[0px]'></div>
@@ -27,7 +27,10 @@ const Register = () => {
             </div>
 
             <div className='card p-4 w-[90%] md:w-[55%] xl:w-[35%] m-auto bg-white'>
-                    <h3 className='text-center'>Register</h3>
+                    <div className='flex justify-between xl:justify-center'>
+                        <Link to="/" className='block xl:hidden'>Home</Link>
+                        <h3 className='text-center'>Register new account</h3>
+                    </div>
                     <form className='w-full mt-5'>
                         <div className='form-group w-full mb-5'>
                             <TextField type="text" className='w-full' id="name" label="Full Name" variant="outlined" />

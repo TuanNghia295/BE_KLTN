@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { IoMdEye } from 'react-icons/io'
 import { IoMdEyeOff } from 'react-icons/io'
 import { FcGoogle } from "react-icons/fc";
-import { Link } from 'react-router-dom';
+import { Link, Links } from 'react-router-dom';
 import '../Login/style.css'
 import Banner1  from '../../assets/log-reg/1.jpg'
 import { SiNike } from "react-icons/si";
@@ -14,20 +14,23 @@ const Login = () => {
     const [isShowPassword,setIsShowPassword] = useState(true);
 
   return (
-    <section className='section py-10 '>
-        <div className='container flex xl:bg-white xl:shadow-md'>
+    <section className='section py-10 xl:py-0'>
+        <div className='container-fuild flex xl:bg-white xl:shadow-md'>
             <div className='hidden xl:block relative'>
                 <img src={Banner1} />
                 <div className='absolute bg-black opacity-90 w-full h-full top-[0px]'>
                 </div>
                 <div className='absolute top-[20%] p-10'>
-                    <SiNike className='text-white text-[100px]' />
+                    <Link to="/"><SiNike className='text-white text-[100px]' /></Link>
                     <h1 className=' text-white text-[50px]'>Hi, everyone !</h1>
                     <p className='text-[#f1f1f1] mt-5 w-[80%] text-justify'>Nike is a global sportswear brand known for its athletic shoes, apparel, and equipment. Founded in 1964, it is famous for its innovation, iconic "Swoosh" logo, and "Just Do It" slogan.</p>
                 </div>
             </div>
             <div className='card  p-4 w-[90%] md:w-[55%] xl:w-[35%] m-auto bg-white'>
-                    <h3 className='text-center'>Login to your account</h3>
+                    <div className='flex justify-between'>
+                        <Link to="/">Home</Link>
+                        <h3 className='text-center'>Login to your account</h3>
+                    </div>
                     <form className='w-full mt-5'>
                         <div className='form-group w-full mb-5'>
                             <TextField type="email" className='w-full' id="email" label="Email" variant="outlined" />
