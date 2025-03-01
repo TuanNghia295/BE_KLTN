@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import React from 'react'
 import { MdDeleteForever } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
   return (
@@ -63,7 +64,11 @@ const Cart = () => {
                 <p className='flex'>Subtotal <span className='ml-auto'>200$</span></p>
                 <p className='flex'>Shipping <span className='ml-auto'>Free</span></p>
                 <p className='border-t border-b border-[#f1f1f1] py-3 my-5 flex'>Total <span className='ml-auto'>200$</span></p>
-                <Button className='!w-full !bg-[#f1f1f1] !text-gray-600 !py-3 !rounded-none !transition-all duration-1000 hover:!bg-black hover:!text-white'>Check Out</Button>
+                <Link to="/checkout">
+                <Button className='!w-full !bg-[#f1f1f1] !text-gray-600 !py-3 !rounded-none !transition-all duration-1000 hover:!bg-black hover:!text-white'>
+                        Check Out
+                </Button>
+                </Link>
             </div>
         </div>
     </section>

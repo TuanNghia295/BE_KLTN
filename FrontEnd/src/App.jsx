@@ -11,6 +11,7 @@ import Drawer from '@mui/material/Drawer';
 import { createContext, useState } from 'react';
 import CartPanel from './components/CartPanel/index.jsx';
 import Cart from './pages/Cart/index.jsx';
+import CheckOut from './pages/CheckOut/index.jsx';
 
 export const MyContext = createContext();
 
@@ -49,6 +50,7 @@ export default function App() {
         <Route path={"/login"} exact={true} element={<Login/>} />
         <Route path={"/register"} exact={true} element={<Register/>} />
         <Route path={"/cart"} exact={true} element={<MainLayout><Cart/></MainLayout>} />
+        <Route path={"/checkout"} exact={true} element={<MainLayout><CheckOut/></MainLayout>} />
       </Routes>
       
       <Drawer open={openCartPanel} onClose={toggleCartPanel(false)} anchor={"right"} className='cartPanel'>
