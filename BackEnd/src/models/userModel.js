@@ -10,13 +10,12 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 
 const userSchema = new mongoose.Schema(
   {
-    id: { type: Number, unique: true },
     userName: { type: String, required: true },
     fullName: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     phone: { type: String, unique: true, required: true },
-    role: { type: String, default: ROLE.USER },
+    role: { type: String, enum: [ROLE.ADMIN, ROLE.USER], required: true },
     address: { type: String, default: null },
     refreshToken: { type: String, default: null },
     createdAt: { type: Date, default: Date.now },

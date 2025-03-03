@@ -1,23 +1,41 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import AutoIncrementFactory from 'mongoose-sequence';
 
-const productSchema = new mongoose.Schema({
+const AutoIncrement = AutoIncrementFactory(mongoose);
+
+const productSchema = new mongoose.Schema(
+  {
+    productId: { type: Number, unique: true }, // ID tự động tăng
+    adminId: { type: Number, required: true }, // ID Admin quản lý sản phẩm
     name: { type: String, required: true },
     price: { type: Number, required: true },
-    description: { type: String, required: true },
-    image: { type: String, required: true },
-    size: { type: String, required: true },
-    color: { type: String, required: true },
-    category: { type: String, required: true },
-    countInStock: { type: Number, required: true },
-    description: { type: String, required: true },
+    description: { type: String, required: true }, // ❌ Sửa lỗi trùng lặp
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
+    imageUrl: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    rating: { type: Number, required: true },
-    numReviews: { type: Number, required: true },
-},{
-    timestamps: true,
-});
 
-const ProductModel = mongoose.model("Product", productSchema);
+    // ✅ Tách `size` & `color` thành mảng biến thể
+    variations: [
+      {
+        size: { type: String, required: true },
+        color: { type: String, required: true },
+        amount: { type: Number, required: true },
+      },
+    ],
+  },
+  {
+    timestamps: true, // Tự động thêm `createdAt` & `updatedAt`
+  }
+);
+
+// ✅ Tạo Auto Increment cho `productId`
+productSchema.plugin(AutoIncrement, { inc_field: 'productId', start_seq: 1 });
+
+const ProductModel = mongoose.model('Product', productSchema);
 
 export default ProductModel;
