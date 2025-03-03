@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const CheckOut = () => {
   return (
-    <section className='section bg-white p-5'>
+    <section className='section bg-white p-5 relative'>
         <div className='container flex flex-col xl:flex-row w-full'>
             <div className='leftPart xl:w-[70%]'>
                 <div className='flex w-full'>
@@ -35,7 +35,7 @@ const CheckOut = () => {
                 
             </div>
             
-            <div className='rightPart w-[100%] xl:w-[30%] pl-0 xl:pl-5 font-[300]'>
+            <div className='rightPartw-[100%] xl:w-[30%] pl-0 xl:pl-5 font-[300]'>
                 <div className='flex w-full'>
                     <h2 className='text-[18px] text-black font-[600]'>YOUR ORDER</h2>
                 </div>
@@ -47,13 +47,13 @@ const CheckOut = () => {
                 <div>
                     <div className='itemCheckout flex items-center mb-3'>
                         <div className='border border-[#f1f1f1] rounded-xl w-[60px] h-[60px] relative'>
-                            <img className='rounded-xl object-center w-[60px] h-[60px]' src="https://cdn.discordapp.com/attachments/1327924387420311573/1332606328492785796/SBTown.png?ex=67c4025b&is=67c2b0db&hm=0acf600e7b2d32d7a74d33f55fc2973b78433a51f0f7e9178c32237767e2a5db&" />
+                            <img className='rounded-xl object-center w-[60px] h-[60px]' src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/8814b1e2-5786-4fea-9aa5-b5a25e5fdb38/WMNS+AIR+FORCE+1+%2707+LX.png" />
                             <p className='absolute -top-2 -right-2 rounded-full text-white bg-[#5e5e5e] text-center min-w-6 min-h-6'>1</p>
                         </div>
 
                         <div className='info ml-3'>
-                            <h4 className='font-[500] text-black'>Nike Dunk 2025</h4>
-                            <p>Size: 10</p>
+                            <h4 className='font-[500] text-black'>Nike Air Force 1 '07 LX</h4>
+                            <p>Size: EU 36</p>
                         </div>
 
                         <div className='ml-auto'>
@@ -63,13 +63,13 @@ const CheckOut = () => {
 
                     <div className='itemCheckout flex items-center mb-3'>
                         <div className='border border-[#f1f1f1] rounded-xl w-[60px] h-[60px] relative'>
-                            <img className='rounded-xl object-center w-[60px] h-[60px]' src="https://cdn.discordapp.com/attachments/1327924387420311573/1332606328492785796/SBTown.png?ex=67c4025b&is=67c2b0db&hm=0acf600e7b2d32d7a74d33f55fc2973b78433a51f0f7e9178c32237767e2a5db&" />
+                            <img className='rounded-xl object-center w-[60px] h-[60px]' src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/a42a5d53-2f99-4e78-a081-9d07a2d0774a/AIR+FORCE+1+%2707.png" />
                             <p className='absolute -top-2 -right-2 rounded-full text-white bg-[#5e5e5e] text-center min-w-6 min-h-6'>1</p>
                         </div>
 
                         <div className='info ml-3'>
-                            <h4 className='font-[500] text-black'>Nike Dunk 2025</h4>
-                            <p>Size: 10</p>
+                            <h4 className='font-[500] text-black'>Nike Air Force 1 '07</h4>
+                            <p>Size: EUR 42</p>
                         </div>
 
                         <div className='ml-auto'>
@@ -79,13 +79,13 @@ const CheckOut = () => {
 
                     <div className='itemCheckout flex items-center mb-3'>
                         <div className='border border-[#f1f1f1] rounded-xl w-[60px] h-[60px] relative'>
-                            <img className='rounded-xl object-center w-[60px] h-[60px]' src="https://cdn.discordapp.com/attachments/1327924387420311573/1332606328492785796/SBTown.png?ex=67c4025b&is=67c2b0db&hm=0acf600e7b2d32d7a74d33f55fc2973b78433a51f0f7e9178c32237767e2a5db&" />
+                            <img className='rounded-xl object-center w-[60px] h-[60px]' src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/cc540e66-3b4e-4e64-a537-cf089a7ca84e/AIR+FORCE+1+%2707.png" />
                             <p className='absolute -top-2 -right-2 rounded-full text-white bg-[#5e5e5e] text-center min-w-6 min-h-6'>1</p>
                         </div>
 
                         <div className='info ml-3'>
-                            <h4 className='font-[500] text-black'>Nike Dunk 2025</h4>
-                            <p>Size: 10</p>
+                            <h4 className='font-[500] text-black'>Nike Air Force 1 '07 LX</h4>
+                            <p>Size: EU 42</p>
                         </div>
 
                         <div className='ml-auto'>
