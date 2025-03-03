@@ -1,13 +1,15 @@
 import express from 'express';
 import productRouter from './productRouter.js';
+import userRouter from './userRouter.js';
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.send("Hello from the server side");
+  res.send('Hello from the server side');
 });
 
 // Sử dụng router.use để kết nối các router con
 router.use('/products', productRouter);
+router.use('/register', userRouter);
 
 export default router;
