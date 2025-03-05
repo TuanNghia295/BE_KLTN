@@ -23,10 +23,15 @@ export const createUser = async (req, res) => {
   // truyền refresh token vào trong database
   try {
     const newUser = await user.save();
+    // Lưu refresh token vào httpOnly cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // chỉ sử dụng secure ở môi trường production (deploy)
+    });
     res.status(201).json({
+      statusCode: 201,
       user: newUser,
-      accessToken,
-      refreshToken,
+      message: 'Tạo tài khoản thành công',
     });
   } catch (error) {
     res.status(409).json({ statusCode: 409, message: error.message });
@@ -58,6 +63,13 @@ export const login = async (req, res) => {
   // truyền refresh token vào trong database
   userExist.refreshToken = refreshToken;
   await userExist.save();
+
+  // Lưu refresh token vào httpOnly cookie
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // chỉ sử dụng secure ở môi trường production (deploy)
+  });
+
   // Trả về thông tin user và token
   res.status(200).json({
     fullName: userExist.fullName,
@@ -67,4 +79,11 @@ export const login = async (req, res) => {
     address: userExist.address,
     accessToken,
   });
+};
+
+// Đăng xuất [POST] /api/logout
+export const logout = async (req, res) => {
+  const { refreshToken } = req.body;
+  await UserModel.findOneAndUpdate({ refreshToken }, { refreshToken: '' });
+  res.status(200).json({ statusCode: 200, message: 'Đăng xuất thành công' });
 };
