@@ -34,7 +34,7 @@ userSchema.method('generateAccessToken', function () {
   return jwt.sign(
     { _id: this._id, isAdmin: this.isAdmin },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '1d' } // Correct format
+    { expiresIn: '7d' } // Correct format
   );
 });
 
