@@ -1,6 +1,7 @@
 import express from 'express';
 import productRouter from './productRouter.js';
 import authRouter from './authRouter.js';
+import uploadRouter from './uploadRouter.js';
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ router.get('/', (req, res) => {
 // Sử dụng router.use để kết nối các router con
 router.use('/products', productRouter);
 router.use('/auth', authRouter);
+router.use('/upload', uploadRouter);
 
 export default router;
