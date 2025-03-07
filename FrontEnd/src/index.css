@@ -73,4 +73,9 @@ nav ul button:hover {
     left: 0;
     background-color: #000;
     z-index: 100;
+    opacity: 0;
+    }
+
+.myAccountTabs li a.active::before {
+    opacity: 100;
 }

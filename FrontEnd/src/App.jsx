@@ -13,6 +13,7 @@ import CartPanel from './components/CartPanel/index.jsx';
 import Cart from './pages/Cart/index.jsx';
 import CheckOut from './pages/CheckOut/index.jsx';
 import MyAccount from './pages/MyAccount/index.jsx';
+import Orders from './pages/Orders/index.jsx';
 
 export const MyContext = createContext();
 
@@ -53,6 +54,7 @@ export default function App() {
         <Route path={"/cart"} exact={true} element={<MainLayout><Cart/></MainLayout>} />
         <Route path={"/checkout"} exact={true} element={<MainLayout><CheckOut/></MainLayout>} />
         <Route path={"/my-account"} exact={true} element={<MainLayout><MyAccount/></MainLayout>} />
+        <Route path={"/my-orders"} exact={true} element={<MainLayout><Orders/></MainLayout>} />
       </Routes>
       
       <Drawer open={openCartPanel} onClose={toggleCartPanel(false)} anchor={"right"} className='cartPanel'>
