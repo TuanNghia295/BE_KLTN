@@ -6,14 +6,14 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 const productSchema = new mongoose.Schema(
   {
     productId: { type: Number, unique: true }, // ID tự động tăng
-    adminId: { type: Number, required: true }, // ID Admin quản lý sản phẩm
+    adminId: { type: Number, required: false }, // ID Admin quản lý sản phẩm
     name: { type: String, required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true }, // ❌ Sửa lỗi trùng lặp
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
-      required: true,
+      required: false,
     },
     imageUrl: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
