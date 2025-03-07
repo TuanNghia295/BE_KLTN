@@ -34,7 +34,7 @@ const Navigation = () => {
               </li>
 
               <li className="list-none relative">
-                <Link to={'/fashion'} className="link transition text-[16px] font-[500]">
+                <Link to={'/listing/fashion'} className="link transition text-[16px] font-[500]">
                   <Button className="link transition font-[500] hover:!text-primary !py-4">Fashion</Button>
                 </Link>
 
@@ -44,7 +44,7 @@ const Navigation = () => {
                 >
                   <ul>
                     <li className="list-none w-full relative">
-                      <Link to={'/men'}>
+                      <Link to={'/listing/men'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Men</Button>
                       </Link>
 
@@ -55,7 +55,7 @@ const Navigation = () => {
                       >
                         <ul>
                           <li className="list-none w-full">
-                            <Link to={'/men'}>
+                            <Link to={'/listing/men/t-shirt'}>
                               <Button className="!text-textPrimary w-full !justify-start !rounded-none">T-Shirt</Button>
                             </Link>
                           </li>
@@ -105,19 +105,19 @@ const Navigation = () => {
               </li>
 
               <li className="list-none">
-                <Link to={'/footwear'} className="link transition text-[16px] font-[500]">
+                <Link to={'/listing/footwear'} className="link transition text-[16px] font-[500]">
                   <Button className="link transition font-[500] hover:!text-primary !py-4">Footwear</Button>
                 </Link>
               </li>
 
               <li className="list-none">
-                <Link to={'/jewellery'} className="link transition text-[16px] font-[500]">
+                <Link to={'/listing/jewellery'} className="link transition text-[16px] font-[500]">
                   <Button className="link transition font-[500] hover:!text-primary !py-4">Jewellery</Button>
                 </Link>
               </li>
 
               <li className="list-none">
-                <Link to={'/jewellery'} className="link transition text-[16px] font-[500]">
+                <Link to={'/listing/sale'} className="link transition text-[16px] font-[500]">
                   <Button className="link transition font-[500] hover:!text-primary !py-4">Sale</Button>
                 </Link>
               </li>

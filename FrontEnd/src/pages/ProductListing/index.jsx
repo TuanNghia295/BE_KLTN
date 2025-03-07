@@ -15,6 +15,7 @@ import { FaAngleDown } from 'react-icons/fa';
 import Pagination from '@mui/material/Pagination';
 
 const ProductListing = () => {
+
   const [itemView, setItemView] = useState('grid');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

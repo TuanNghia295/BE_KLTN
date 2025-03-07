@@ -47,7 +47,7 @@ export default function App() {
       
       <Routes>
         <Route path="/" exact={true} element={<MainLayout><Home /></MainLayout>} />
-        <Route path="/productListing" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
         <Route path={"/product/:id"} exact={true} element={<MainLayout><ProductDetails/></MainLayout>} />
         <Route path={"/login"} exact={true} element={<Login/>} />
         <Route path={"/register"} exact={true} element={<Register/>} />
