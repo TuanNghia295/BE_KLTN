@@ -64,8 +64,8 @@ export const getAllProducts = async (request, response) => {
         }
 
         response.status(200).json({
-            products : products,
-            totalPage : totalPages,
+            products,
+            totalPages : totalPages,
             page : page,
         });
     } catch (error) {
@@ -130,13 +130,11 @@ export const getAllProductsCount = async (request, response) => {
 // Get Single Product
 export const getSingleProduct = async (request, response) => {
     try {
-        const singleProduct = await ProductModel.find({
-            name: request.query.name
-        })
+        const product = await ProductModel.findById(
+            request.params.id
+        )
 
-        response.status(200).json({
-            singleProduct
-        })
+        response.status(200).json(product)
     } catch (error) {
         response.status(500).json({ message: error.message });
     }

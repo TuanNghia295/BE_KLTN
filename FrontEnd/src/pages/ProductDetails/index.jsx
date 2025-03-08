@@ -9,8 +9,43 @@ import { Button } from '@mui/material';
 import HomeCartSlider from '../../components/HomeCartSlider';
 import Gallery from '../../components/gallery';
 import Size from '../../components/Size';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const ProductDetails = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+  
+    fetch(`http://localhost:3001/products/getSingleProduct/${id}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Lỗi HTTP! Trạng thái: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  }, [id]);
+
+  // Kiểm tra nếu đang tải dữ liệu
+  if (loading) {
+    return <p>Đang tải thông tin sản phẩm...</p>;
+  }
+  
+  // Kiểm tra nếu không tìm thấy sản phẩm
+  if (!product) {
+    return <p>Sản phẩm không tồn tại.</p>;
+  }
+
   // lấy ra tỉ lệ màn hình hiện tại để xác định số lượng slide hiển thị
   const slidesPerView = window.innerWidth > 1024 ? 4 : window.innerWidth > 600 ? 3 : 3;
   return (
@@ -20,10 +55,10 @@ const ProductDetails = () => {
           <Link underline="hover" color="inherit" href="/">
             MUI
           </Link>
-          <Link underline="hover" color="inherit" href="/material-ui/getting-started/installation/">
-            Core
+          <Link underline="hover" color="inherit" href="/productListing">
+            Product
           </Link>
-          <Typography sx={{ color: 'text.primary' }}>Breadcrumbs</Typography>
+          <Typography sx={{ color: 'text.primary' }}>{product.name}</Typography>
         </Breadcrumbs>
       </div>
       <section className="bg-white py-5">
@@ -33,14 +68,14 @@ const ProductDetails = () => {
           <div className="flex justify-evenly xl:flex-row flex-col gap-4 xl:gap-0">
             {/* Hình ảnh sản phẩm */}
             <div className="productZoomContainer custom-scrollbar w-[100%] xl:w-[40%]  xl:h-[auto] overflow-x-scroll overflow-y-hidden xl:overflow-x-hidden ">
-              <Gallery />
+              <Gallery key={product._id} product={product} />
             </div>
 
             {/* Loại sản phẩm, size addtoCart và description */}
             <div className="p-5  w-[100%] xl:w-[35%] ">
               <h3>Footwear</h3>
-              <h1 className="text-[30px] font-[600] text-black">Nike Dunk 2025</h1>
-              <p className="text-[20px] font-[600] text-primary">2.000.000đ</p>
+              <h1 className="text-[30px] font-[600] text-black">{product.name}</h1>
+              <p className="text-[20px] font-[600] text-primary">{product.price}$</p>
               {/* Size component */}
               <Size type={'shoes'} />
 

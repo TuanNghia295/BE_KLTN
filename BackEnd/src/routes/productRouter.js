@@ -8,7 +8,7 @@ productRouter.post('/create', authMiddleware, createProduct);
 productRouter.get('/getAllProducts', getAllProducts);
 productRouter.get('/getAllProducts/:id', getAllProductsByCategoryId);
 productRouter.get('/getProductsCount', getAllProductsCount)
-productRouter.get('/getSingleProduct', getSingleProduct)
+productRouter.get('/getSingleProduct/:id', getSingleProduct)
 productRouter.delete('/:id', authMiddleware, deleteProduct)
 productRouter.put('/update/:id', authMiddleware, updateProduct)
 
