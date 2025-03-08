@@ -61,13 +61,13 @@ const Navigation = () => {
                           </li>
 
                           <li className="list-none w-full">
-                            <Link to={'/women'}>
+                            <Link to={'/listing/men/jeans'}>
                               <Button className="!text-textPrimary w-full !justify-start !rounded-none">Jeans</Button>
                             </Link>
                           </li>
 
                           <li className="list-none w-full">
-                            <Link to={'/children'}>
+                            <Link to={'/listing/men/footwear'}>
                               <Button className="!text-textPrimary w-full !justify-start !rounded-none">
                                 Footwear
                               </Button>
@@ -75,7 +75,7 @@ const Navigation = () => {
                           </li>
 
                           <li className="list-none w-full">
-                            <Link to={'/other'}>
+                            <Link to={'/listing/men/watch'}>
                               <Button className="!text-textPrimary w-full !justify-start !rounded-none">Watch</Button>
                             </Link>
                           </li>
@@ -84,19 +84,19 @@ const Navigation = () => {
                     </li>
 
                     <li className="list-none w-full">
-                      <Link to={'/women'}>
+                      <Link to={'/listing/women'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Women</Button>
                       </Link>
                     </li>
 
                     <li className="list-none w-full">
-                      <Link to={'/children'}>
+                      <Link to={'/listing/children'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Kids</Button>
                       </Link>
                     </li>
 
                     <li className="list-none w-full">
-                      <Link to={'/other'}>
+                      <Link to={'/listing/other'}>
                         <Button className="!text-textPrimary w-full !justify-start !rounded-none">Other</Button>
                       </Link>
                     </li>
