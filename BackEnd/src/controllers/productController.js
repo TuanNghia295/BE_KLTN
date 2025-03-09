@@ -2,53 +2,58 @@ import ProductModel from '../models/productModel.js';
 import CategoryModel from '../models/categoriesModel.js';
 import mongoose from 'mongoose';
 import { ROLE } from '../constant/role.js';
+import cloudinary from '../config/cloudinary.js';
+import multer from 'multer';
+
+// Cấu hình bộ nhớ tạm cho multer
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Tạo sản phẩm
 export const createProduct = async (request, response) => {
-  const { name, price, description, imageUrl, categoryId, variations } =
-    request.body;
+  const { name, price, description, categoryId, variations } = request.body;
 
-  // Lấy role từ header
-  const role = request.header('role');
-  try {
-    if (role !== ROLE.ADMIN) {
-      return response.status(403).json({
-        message: 'You are not authorized',
-      });
-    }
+  // Lấy file từ request
+  const imageFile = request.file; // Lấy file từ multer
 
-    console.log('role', role);
-
-    // kiểm tra kiểu dữ liệu của biến variations
-    const parsedVariations =
-      typeof variations === 'string' ? JSON.parse(variations) : variations;
-
-    const product = new ProductModel({
-      name,
-      price,
-      description,
-      imageUrl,
-      categoryId: new mongoose.Types.ObjectId(categoryId),
-      variations: parsedVariations,
-    });
-
-    const newProduct = await product.save();
-    if (!newProduct) {
-      return response.status(500).json({
-        message: 'Product not created',
-        success: false,
-        error: true,
-      });
-    }
-
-    response.status(201).json(newProduct);
-  } catch (error) {
-    response.status(500).json({
-      message: 'Cannot create product',
-      success: false,
-      error: error.message,
-    });
+  if (!imageFile) {
+    return response.status(400).json({ message: 'Image is required' });
   }
+
+  // Upload lên Cloudinary
+  const result = await cloudinary.uploader.upload_stream(
+    {
+      folder: 'products',
+      allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'], // Cho phép WebP
+      format: 'webp', // Ép kiểu thành WebP
+      transformation: [
+        { quality: 'auto', fetch_format: 'webp' }, // Chuyển về WebP tự động
+        { width: 500, height: 500, crop: 'fill', gravity: 'auto' }, // Resize ảnh
+      ],
+    },
+    (error, result) => {
+      if (error) {
+        return response.status(500).json({ message: 'Upload failed', error });
+      }
+
+      // Tiếp tục xử lý tạo sản phẩm sau khi upload thành công
+      const newProduct = new ProductModel({
+        name,
+        price,
+        description,
+        imageUrl: result.secure_url, // Lưu URL ảnh
+        categoryId: new mongoose.Types.ObjectId(categoryId),
+        variations: typeof variations === 'string' ? JSON.parse(variations) : variations,
+      });
+
+      newProduct
+        .save()
+        .then((product) => response.status(201).json(product))
+        .catch((err) => response.status(500).json({ message: 'Cannot create product', error: err.message }));
+    }
+  );
+
+  result.end(imageFile.buffer);
 };
 
 // Lấy toàn bộ sản phẩm
@@ -161,9 +166,7 @@ export const getSingleProduct = async (request, response) => {
 
 // Delete Product
 export const deleteProduct = async (request, response) => {
-  const product = await ProductModel.findByIdAndDelete(
-    request.params.id
-  ).populate('categoryId');
+  const product = await ProductModel.findByIdAndDelete(request.params.id).populate('categoryId');
 
   if (!product) {
     return response.status(500).json({
@@ -179,8 +182,7 @@ export const deleteProduct = async (request, response) => {
 // Update Product
 export const updateProduct = async (request, response) => {
   try {
-    const { name, price, description, imageUrl, categoryId, variations } =
-      request.body;
+    const { name, price, description, imageUrl, categoryId, variations } = request.body;
 
     const product = await ProductModel.findByIdAndUpdate(request.params.id, {
       name,
