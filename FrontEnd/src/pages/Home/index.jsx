@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HomeSlider from '../../components/HomeSlider';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -12,8 +12,20 @@ import Banner2 from '../../assets/banner/banner2.jpg';
 import Banner3 from '../../assets/banner/banner3.jpg';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+// Call API GET PRODUCTS
+import { getAllProducts } from '../../apis/productsService';
 
 export default function Home() {
+  const [listProducts, setListProducts] = useState([])
+    
+  
+  useEffect(() => {
+    setListProducts([]);
+    getAllProducts().then((response) => {
+      setListProducts(response.products)
+    })
+  }, [])
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -64,7 +76,7 @@ export default function Home() {
               </Tabs>
             </div>
           </div>
-          <ProductsSlider items={3} />
+              <ProductsSlider items={4} listProducts={listProducts} />
         </div>
       </section>
 

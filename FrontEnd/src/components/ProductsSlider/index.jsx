@@ -7,33 +7,28 @@ import { Navigation } from 'swiper/modules';
 import ProductItem from '../ProductItem';
 import '../ProductsSlider/style.css';
 
-const ProductsSlider = (props) => {
+const ProductsSlider = ({items, listProducts}) => {
   return (
     <div className="productsSlider mt-5 w-full">
       <div className="container">
         <Swiper
-          slidesPerView={props.items}
+          slidesPerView={items}
           spaceBetween={20}
           navigation={true}
           modules={[Navigation]}
           className="productSlide"
           loop={true}
         >
-          <SwiperSlide>
-            <ProductItem />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductItem />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductItem />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductItem />
-          </SwiperSlide>
+        {listProducts.length === 0 ? (
+            <p>Không có sản phẩm nào.</p>
+          ) : (
+          listProducts.map((product) => (
+            <SwiperSlide>
+              <ProductItem key={product._id} product={product} />
+            </SwiperSlide>
+          ))
+        )}          
+        
         </Swiper>
       </div>
     </div>

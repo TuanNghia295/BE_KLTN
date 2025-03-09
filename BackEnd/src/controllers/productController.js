@@ -6,6 +6,21 @@ const mongoose = require("mongoose");
 // Tạo sản phẩm
 export const createProduct = async (request, response) => {
     const { name, price, description, imageUrl, categoryId, variations} = request.body;
+
+    let parsedVariations = variations;
+    if (typeof variations === "string") {
+        try {
+            parsedVariations = JSON.parse(variations);
+        } catch (error) {
+            return response.status(400).json({
+                message: "Invalid variations format",
+                success: false,
+                error: true
+            });
+        }
+    }
+
+
     try {
         const product = new ProductModel({
             name,
@@ -13,7 +28,7 @@ export const createProduct = async (request, response) => {
             description,
             imageUrl,
             categoryId: new mongoose.Types.ObjectId(categoryId),
-            variations
+            variations : parsedVariations
         });
 
         const newProduct = await product.save();

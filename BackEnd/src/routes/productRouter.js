@@ -4,7 +4,7 @@ import authMiddleware from '../middleware/authMiddleware.js';
 
 const productRouter = express.Router();
 
-productRouter.post('/create', authMiddleware, createProduct);
+productRouter.post('/create', createProduct);
 productRouter.get('/getAllProducts', getAllProducts);
 productRouter.get('/getAllProducts/:id', getAllProductsByCategoryId);
 productRouter.get('/getProductsCount', getAllProductsCount)

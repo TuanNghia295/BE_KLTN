@@ -47,8 +47,6 @@ export default function App() {
       
       <Routes>
         <Route path="/" exact={true} element={<MainLayout><Home /></MainLayout>} />
-        <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
-        <Route path="/listing/:category/:subcategory" element={<MainLayout><ProductListing /></MainLayout>} />
         <Route path={"/product/:id"} exact={true} element={<MainLayout><ProductDetails/></MainLayout>} />
         <Route path={"/login"} exact={true} element={<Login/>} />
         <Route path={"/register"} exact={true} element={<Register/>} />
@@ -56,6 +54,9 @@ export default function App() {
         <Route path={"/checkout"} exact={true} element={<MainLayout><CheckOut/></MainLayout>} />
         <Route path={"/my-account"} exact={true} element={<MainLayout><MyAccount/></MainLayout>} />
         <Route path={"/my-orders"} exact={true} element={<MainLayout><Orders/></MainLayout>} />
+        <Route path="/listing" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path="/listing/:category/:subcategory" element={<MainLayout><ProductListing /></MainLayout>} />
       </Routes>
       
       <Drawer open={openCartPanel} onClose={toggleCartPanel(false)} anchor={"right"} className='cartPanel'>

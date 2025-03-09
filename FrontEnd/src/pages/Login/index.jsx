@@ -15,9 +15,9 @@ const Login = () => {
 
   return (
     <section className='section py-10 xl:py-0'>
-        <div className='container-fuild flex xl:bg-white xl:shadow-md'>
+        <div className='container-fuild flex xl:bg-white h-screen'>
             <div className='hidden xl:block relative'>
-                <img src={Banner1} />
+                <img className='h-screen' src={Banner1} />
                 <div className='absolute bg-black opacity-90 w-full h-full top-[0px]'>
                 </div>
                 <div className='absolute top-[20%] p-10'>
