@@ -10,8 +10,21 @@ import Register from './pages/Register/index.jsx'
 import Drawer from '@mui/material/Drawer';
 import { createContext, useState } from 'react';
 import CartPanel from './components/CartPanel/index.jsx';
+import Cart from './pages/Cart/index.jsx';
+import CheckOut from './pages/CheckOut/index.jsx';
+import MyAccount from './pages/MyAccount/index.jsx';
+import Orders from './pages/Orders/index.jsx';
 
 export const MyContext = createContext();
+
+export const MainLayout = ({ children }) => (
+  <>
+    <Header />
+    <main>{children}</main>
+    <Footer />
+  </>
+);
+
 
 export default function App() {
 
@@ -31,15 +44,20 @@ export default function App() {
     <>
     <BrowserRouter>
     <MyContext.Provider value={values}>
-      <Header />
+      
       <Routes>
-        <Route path="/" exact={true} element={<Home />} />
-        <Route path="/productListing" exact={true} element={<ProductListing />} />
-        <Route path={"/product/:id"} exact={true} element={<ProductDetails/>} />
+        <Route path="/" exact={true} element={<MainLayout><Home /></MainLayout>} />
+        <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path="/listing/:category/:subcategory" element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path={"/product/:id"} exact={true} element={<MainLayout><ProductDetails/></MainLayout>} />
         <Route path={"/login"} exact={true} element={<Login/>} />
         <Route path={"/register"} exact={true} element={<Register/>} />
+        <Route path={"/cart"} exact={true} element={<MainLayout><Cart/></MainLayout>} />
+        <Route path={"/checkout"} exact={true} element={<MainLayout><CheckOut/></MainLayout>} />
+        <Route path={"/my-account"} exact={true} element={<MainLayout><MyAccount/></MainLayout>} />
+        <Route path={"/my-orders"} exact={true} element={<MainLayout><Orders/></MainLayout>} />
       </Routes>
-      <Footer />
+      
       <Drawer open={openCartPanel} onClose={toggleCartPanel(false)} anchor={"right"} className='cartPanel'>
       <CartPanel/>
       </Drawer>

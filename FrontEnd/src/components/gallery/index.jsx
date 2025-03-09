@@ -1,5 +1,4 @@
-import { useState, useEffect} from 'react';
-import { useParams } from "react-router-dom";
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
@@ -11,9 +10,8 @@ import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import ProductZoom from '../ProductZoom';
 
-export default function Gallery({ product }) {
+export default function Gallery() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
   return (
     <>
       <Swiper
@@ -31,12 +29,16 @@ export default function Gallery({ product }) {
       >
         <SwiperSlide>
           <ProductZoom
-            img={product.imageUrl}
+            img={
+              'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/603c6f9c-75fd-4af1-aa21-eb78c277cd80/M+VAPOR+LITE+3+HC+C.png'
+            }
           />
         </SwiperSlide>
         <SwiperSlide>
           <ProductZoom
-            img={product.imageUrl}
+            img={
+              'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/598c8584-652e-4167-a659-86a043523c57/M+VAPOR+LITE+3+HC+C.png'
+            }
           />
         </SwiperSlide>
       </Swiper>
@@ -51,10 +53,10 @@ export default function Gallery({ product }) {
         className="mySwiper"
       >
         <SwiperSlide>
-          <img src={product.imageUrl} />
+          <img src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/603c6f9c-75fd-4af1-aa21-eb78c277cd80/M+VAPOR+LITE+3+HC+C.png" />
         </SwiperSlide>
         <SwiperSlide>
-          <img src={product.imageUrl} />
+          <img src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/598c8584-652e-4167-a659-86a043523c57/M+VAPOR+LITE+3+HC+C.png" />
         </SwiperSlide>
       </Swiper>
     </>

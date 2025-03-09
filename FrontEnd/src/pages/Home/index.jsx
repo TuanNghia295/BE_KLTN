@@ -20,7 +20,6 @@ export default function Home() {
     setValue(newValue);
   };
 
-
   return (
     <div className="bg-white">
       <HomeSlider />

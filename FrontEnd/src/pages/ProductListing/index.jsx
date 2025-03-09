@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SlideBar from '../../components/SlideBar';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -15,6 +15,7 @@ import { FaAngleDown } from 'react-icons/fa';
 import Pagination from '@mui/material/Pagination';
 
 const ProductListing = () => {
+
   const [itemView, setItemView] = useState('grid');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -25,27 +26,8 @@ const ProductListing = () => {
     setAnchorEl(null);
   };
 
-  const [products, setProducts] = useState([]);
-  const [totalPages, setTotalPages] = useState(0); // Số trang
-  const [page, setPage] = useState(1); // Trang hiện tại
-
-  useEffect(() => {
-    fetch(`http://localhost:3001/products/getAllProducts?page=${page}`) // Gửi trang hiện tại
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data.products)) {
-          setProducts(data.products);
-          setTotalPages(data.totalPages);
-          setPage(data.page);
-        } else {
-          console.error("Dữ liệu trả về không phải là mảng", data);
-        }
-      })
-      .catch((err) => console.error("Error fetching products:", err));
-  }, [page]); // useEffect sẽ chạy lại khi `page` thay đổi
-
   return (
-    <section className="py-5">
+    <section className='pt-5'>
       <div className="container !text-center">
         <Breadcrumbs className="flex w-full justify-center" aria-label="breadcrumb">
           <Link underline="hover" color="inherit" to="/">
@@ -120,13 +102,14 @@ const ProductListing = () => {
             <div className={`grid ${itemView === 'grid' ? 'grid-cols-2 xl:grid-cols-4' : 'grid-cols-1'} gap-4`}>
               {itemView === 'grid' ? (
                 <>
-                        {products.length === 0 ? (
-                                  <p>Không có sản phẩm nào.</p>
-                                ) : (
-                                  products.map((product) => (
-                                    <ProductItem key={product._id} product={product} />
-                                  ))
-                                )}
+                  <ProductItem />
+                  <ProductItem />
+                  <ProductItem />
+                  <ProductItem />
+                  <ProductItem />
+                  <ProductItem />
+                  <ProductItem />
+                  <ProductItem />
                 </>
               ) : (
                 <>

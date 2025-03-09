@@ -6,14 +6,14 @@ import { IoGitCompareOutline } from 'react-icons/io5';
 import { MdZoomOutMap } from 'react-icons/md';
 import Tooltip from '@mui/material/Tooltip';
 
-const ProductItem = ({ product }) => {
+const ProductItem = () => {
   return (
     <div className="productItem rounded-md w-[100%] overflow-hidden bg-white text-black shadow-lg relative">
       <div className="group imgWrapper overflow-hidden rounded-none relative">
-        <Link to="/">
+        <Link to="/product/2">
           <div className="img h-[250px] overflow-hidden">
             <img
-              src={product.imageUrl}
+              src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.3/h_466,c_limit/dab259aa-dbc3-4c18-85e8-38dababbed92/dunk-low-retro-shoes-Xhh8kc.png"
               className="w-full h-full object-cover"
             />
             <img
@@ -45,13 +45,13 @@ const ProductItem = ({ product }) => {
           </Link>
         </h6>
         <h3 className="text-[16px] title mt-2 font-[500] mb-2">
-          <Link to={`/product/${product._id}`} className="link transition-all">
-            {product.name}
+          <Link to="/" className="link transition-all">
+            Nike Jordan 2025
           </Link>
         </h3>
 
         <div className="flex items-center gap-4">
-          <span className="newPrice text-black text-[18px]">{product.price}$</span>
+          <span className="newPrice text-black text-[18px]">5.000.000đ</span>
         </div>
       </div>
     </div>

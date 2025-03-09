@@ -32,7 +32,7 @@ export default function CategoryCollapse() {
       <div className="scroll">
         <ul className="w-full">
           <li className="list-none flex items-center relative flex-col">
-            <Link to={'/fashion'} className="w-full">
+            <Link to={'/listing/fashion'} className="w-full">
               <Button className="w-full !text-left !justify-start !px-3 !text-textPrimary  hover:!bg-grayf5">
                 Fashion
               </Button>
@@ -53,7 +53,7 @@ export default function CategoryCollapse() {
             {submenuIndex === 0 && (
               <ul className="inner_submenu  w-full pl-3 ">
                 <li className="list-none relative">
-                  <Link to={'/men'} className="!hover:!text-primary !transition">
+                  <Link to={'/listing/men'} className="!hover:!text-primary !transition">
                     <Button className="w-full hover:!bg-grayf5 !text-left !justify-start !px-3 !text-textPrimary">
                       Men
                     </Button>
@@ -61,7 +61,7 @@ export default function CategoryCollapse() {
                 </li>
 
                 <li className="list-none relative">
-                  <Link to={'/women'} className="!hover:!text-primary !transition">
+                  <Link to={'/listing/women'} className="!hover:!text-primary !transition">
                     <Button className="w-full hover:!bg-grayf5 !text-left !justify-start !px-3 !text-textPrimary">
                       Women
                     </Button>
@@ -69,7 +69,7 @@ export default function CategoryCollapse() {
                 </li>
 
                 <li className="list-none relative">
-                  <Link to={'/children'} className="!hover:!text-primary !transition">
+                  <Link to={'/listing/children'} className="!hover:!text-primary !transition">
                     <Button className="w-full hover:!bg-grayf5 !text-left !justify-start !px-3 !text-textPrimary">
                       Kids
                     </Button>
@@ -80,7 +80,7 @@ export default function CategoryCollapse() {
           </li>
 
           <li className="list-none flex items-center relative flex-col">
-            <Link to={'/fashion'} className="w-full">
+            <Link to={'/listing/fashion'} className="w-full">
               <Button className="w-full !text-left !justify-start !px-3 !text-textPrimary  hover:!bg-grayf5">
                 Fashion
               </Button>
@@ -101,7 +101,7 @@ export default function CategoryCollapse() {
             {submenuIndex === 1 && (
               <ul className="inner_submenu  w-full pl-3 ">
                 <li className="list-none relative">
-                  <Link to={'/men'} className="!hover:!text-primary !transition">
+                  <Link to={'/listing/men'} className="!hover:!text-primary !transition">
                     <Button className="w-full hover:!bg-grayf5 !text-left !justify-start !px-3 !text-textPrimary">
                       Men
                     </Button>
@@ -109,7 +109,7 @@ export default function CategoryCollapse() {
                 </li>
 
                 <li className="list-none relative">
-                  <Link to={'/women'} className="!hover:!text-primary !transition">
+                  <Link to={'/listing/women'} className="!hover:!text-primary !transition">
                     <Button className="w-full hover:!bg-grayf5 !text-left !justify-start !px-3 !text-textPrimary">
                       Women
                     </Button>
@@ -117,7 +117,7 @@ export default function CategoryCollapse() {
                 </li>
 
                 <li className="list-none relative">
-                  <Link to={'/children'} className="!hover:!text-primary !transition">
+                  <Link to={'/listing/children'} className="!hover:!text-primary !transition">
                     <Button className="w-full hover:!bg-grayf5 !text-left !justify-start !px-3 !text-textPrimary">
                       Children
                     </Button>
