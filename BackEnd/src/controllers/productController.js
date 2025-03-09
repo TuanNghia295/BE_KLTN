@@ -1,19 +1,24 @@
 import ProductModel from '../models/productModel.js';
 import CategoryModel from '../models/categoriesModel.js';
 import mongoose from 'mongoose';
+import { ROLE } from '../constant/role.js';
 
 // Tạo sản phẩm
 export const createProduct = async (request, response) => {
-  const {
-    name,
-    price,
-    description,
-    imageUrl,
-    categoryId,
-    variations,
-    adminId,
-  } = request.body;
+  const { name, price, description, imageUrl, categoryId, variations } =
+    request.body;
+
+  // Lấy role từ header
+  const role = request.header('role');
   try {
+    if (role !== ROLE.ADMIN) {
+      return response.status(403).json({
+        message: 'You are not authorized',
+      });
+    }
+
+    console.log('role', role);
+
     // kiểm tra kiểu dữ liệu của biến variations
     const parsedVariations =
       typeof variations === 'string' ? JSON.parse(variations) : variations;
@@ -21,7 +26,6 @@ export const createProduct = async (request, response) => {
     const product = new ProductModel({
       name,
       price,
-      adminId,
       description,
       imageUrl,
       categoryId: new mongoose.Types.ObjectId(categoryId),
@@ -105,10 +109,10 @@ export const getAllProductsByCategoryId = async (request, response) => {
     const products = await ProductModel.find({
       categoryId: request.params.id,
     })
-      .populate('categoryId')
-      .skip((page - 1) * perPage)
-      .limit(perPage)
-      .exec();
+      .populate('categoryId') // Lấy thông tin của danh mục
+      .skip((page - 1) * perPage) // Bỏ qua số lượng sản phẩm
+      .limit(perPage) // Giới hạn số lượng sản phẩm
+      .exec(); // Thực thi
 
     if (!products) {
       return response.status(500).json({
