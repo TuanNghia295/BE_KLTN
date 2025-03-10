@@ -68,4 +68,28 @@ const createBanner = async (req, res) => {
   result.end(imageFile.buffer); // Kết thúc quá trình upload
 };
 
-export { getBanners, createBanner };
+// Xóa banner
+const deleteBanner = async (req, res) => {
+  const { id } = req.params;
+
+  // Kiểm tra role có phải là ADMIN không
+  const role = req.headers.role;
+
+  if (role !== ROLE.ADMIN) {
+    return res.status(403).json({
+      success: false,
+      message: 'You are not allowed to perform this action',
+    });
+  }
+
+  BannerModel.findByIdAndDelete({ id })
+    .then((banner) => {
+      if (!banner) {
+        return res.status(404).json({ message: 'Banner not found' });
+      }
+      res.status(200).json({ message: 'Delete banner successfully' });
+    })
+    .catch((err) => res.status(500).json({ message: 'Cannot delete banner', error: err.message }));
+};
+
+export { getBanners, createBanner, deleteBanner };
