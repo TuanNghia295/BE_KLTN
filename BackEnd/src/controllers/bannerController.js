@@ -4,10 +4,24 @@ import multer from 'multer';
 import cloudinary from '../config/cloudinary.js';
 import { ROLE } from '../constant/role.js';
 
-// lấy danh sách banner
+// lấy danh sách banner phân trang và sắp xếp dựa theo order DESC hoặc ASC
+// /api/banners?page=2&limit=5&sort=createdAt&type=DESC
 const getBanners = (req, res) => {
-  const banners = BannerModel.find({});
-  res.json(banners);
+  const { page, limit, sort, type } = req.query; // Lấy các tham số page, limit và sort từ query string của request
+  const pageNumber = parseInt(page); // Chuyển đổi tham số page thành số nguyên
+  const limitNumber = parseInt(limit); // Chuyển đổi tham số limit thành số nguyên
+
+  const sortObject = { [sort]: type === 'DESC' ? -1 : 1 }; // Tạo object sort dựa trên tham số sort và type
+
+  const sortKey = Object.keys(sortObject)[0]; // Lấy key của object sort
+  const sortValue = Object.values(sortObject)[0]; // Lấy value của object sort
+
+  BannerModel.find() // Tìm tất cả các banner trong cơ sở dữ liệu
+    .sort({ [sortKey]: sortValue }) // Sắp xếp các banner theo key và value được cung cấp
+    .skip((pageNumber - 1) * limitNumber) // Bỏ qua một số lượng banner nhất định để phân trang
+    .limit(limitNumber) // Giới hạn số lượng banner trả về
+    .then((banners) => res.status(200).json(banners)) // Trả về danh sách các banner dưới dạng JSON với mã trạng thái 200
+    .catch((err) => res.status(500).json({ message: 'Cannot get banners', error: err.message })); // Xử lý lỗi và trả về mã trạng thái 500
 };
 
 // tạo banner
