@@ -1,6 +1,7 @@
 import express from 'express';
 import productRouter from './productRouter.js';
 import authRouter from './authRouter.js';
+import bannerRouter from './bannerRouter.js';
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.get('/', (req, res) => {
 
 // Sử dụng router.use để kết nối các router con
 router.use('/products', productRouter);
+router.use('/banners', bannerRouter);
 router.use('/auth', authRouter);
 
 export default router;

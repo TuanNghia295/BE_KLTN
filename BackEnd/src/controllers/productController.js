@@ -53,7 +53,7 @@ export const createProduct = async (request, response) => {
     }
   );
 
-  result.end(imageFile.buffer);
+  result.end(imageFile.buffer); // Kết thúc quá trình upload
 };
 
 // Lấy toàn bộ sản phẩm
