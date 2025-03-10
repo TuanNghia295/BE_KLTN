@@ -5,7 +5,7 @@ import multer from 'multer';
 
 const bannerRouter = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
-bannerRouter.get('/', getBanners);
+bannerRouter.get('/getAll', getBanners);
 bannerRouter.post('/create', authMiddleware, upload.single('url'), createBanner);
 bannerRouter.post('/delete:id', authMiddleware, deleteBanner);
 

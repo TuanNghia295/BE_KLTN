@@ -16,7 +16,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 productRouter.post('/create', authMiddleware, upload.single('imageUrl'), createProduct);
 productRouter.get('/getAllProducts', getAllProducts);
-productRouter.get('/getAllProducts/:id', getAllProductsByCategoryId);
+productRouter.get('/getAllProducts/:categoryId', getAllProductsByCategoryId);
 productRouter.get('/getProductsCount', getAllProductsCount);
 productRouter.get('/getSingleProduct', getSingleProduct);
 productRouter.delete('/:id', authMiddleware, deleteProduct);

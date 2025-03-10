@@ -96,43 +96,34 @@ export const getAllProducts = async (request, response) => {
 };
 
 // Lấy toàn bộ sản phẩm trong từng danh mục (categoryId)
-export const getAllProductsByCategoryId = async (request, response) => {
+export const getAllProductsByCategoryId = async (req, res) => {
+  const { categoryId } = req.params;
+  const { page, limit, sort, type } = req.query;
+
+  const pageNumber = parseInt(page) || 1;
+  const limitNumber = parseInt(limit) || 10;
+  const sortObject = { [sort]: type === 'DESC' ? -1 : 1 };
+
   try {
-    const page = parseInt(request.query.page) || 1;
-    const perPage = parseInt(request.query.perPage);
-    const totalPosts = await ProductModel.countDocuments();
-    const totalPages = Math.ceil(totalPosts / perPage);
+    const products = await ProductModel.find({ categoryId })
+      .sort(sortObject)
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber)
+      .populate('categoryId'); // Lấy thông tin của category
 
-    if (page > perPage) {
-      return response.status(404).json({
-        message: 'Page not found',
-        success: false,
-        error: true,
-      });
-    }
+    const totalProducts = await ProductModel.countDocuments({ categoryId });
+    const totalPages = Math.ceil(totalProducts / limitNumber);
 
-    const products = await ProductModel.find({
-      categoryId: request.params.id,
-    })
-      .populate('categoryId') // Lấy thông tin của danh mục
-      .skip((page - 1) * perPage) // Bỏ qua số lượng sản phẩm
-      .limit(perPage) // Giới hạn số lượng sản phẩm
-      .exec(); // Thực thi
-
-    if (!products) {
-      return response.status(500).json({
-        error: true,
-        success: false,
-      });
-    }
-
-    response.status(200).json({
-      products: products,
-      totalPage: totalPages,
-      page: page,
+    res.status(200).json({
+      data: products,
+      pagination: {
+        page: pageNumber,
+        limit: limitNumber,
+        totalPages,
+      },
     });
   } catch (error) {
-    response.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Cannot get products', error: error.message });
   }
 };
 
