@@ -88,3 +88,54 @@ export const addToCart = async (req, res) => {
     res.status(500).json({ message: 'Cannot add to cart', error: error.message });
   }
 };
+
+// PUT /cart/update/:userId?productId=...&size=...&color=...&quantity=...
+export const updateCart = async (req, res) => {
+  const { productId, size, color, quantity } = req.query;
+  const userId = req.params.userId;
+
+  // Kiểm tra tính hợp lệ của userId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: 'Invalid userId' });
+  }
+
+  // Kiểm tra tính hợp lệ của productId
+  if (!Number.isInteger(parseInt(productId))) {
+    return res.status(400).json({ message: 'Invalid productId' });
+  }
+
+  try {
+    // Tìm giỏ hàng của người dùng
+    const cart = await CartModel.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    // Kiểm tra xem sản phẩm có tồn tại không
+    const product = await ProductModel.findOne({ productId: parseInt(productId) });
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Kiểm tra xem biến thể sản phẩm có tồn tại không
+    const variation = product.variations.find((v) => v.size === size && v.color === color);
+    if (!variation) {
+      return res.status(404).json({ message: 'Product variation not found' });
+    }
+
+    // Nếu biến thể sản phẩm đã có trong giỏ hàng, cập nhật số lượng
+    const itemIndex = cart.items.findIndex(
+      (item) => item.productId === parseInt(productId) && item.size === size && item.color === color
+    );
+
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity = parseInt(quantity);
+      await cart.save();
+      return res.status(200).json(cart);
+    } else {
+      return res.status(404).json({ message: 'Product variation not found in cart' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Cannot update cart', error: error.message });
+  }
+};
