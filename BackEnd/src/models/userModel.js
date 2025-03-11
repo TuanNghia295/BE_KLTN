@@ -26,9 +26,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Auto-increment id field
-userSchema.plugin(AutoIncrement, { inc_field: 'id', start_seq: 1 });
-
 // Generate Access Token
 userSchema.method('generateAccessToken', function () {
   return jwt.sign(

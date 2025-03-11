@@ -1,5 +1,41 @@
+import mongoose from 'mongoose';
 import CartModel from '../models/cartModel.js';
 import ProductModel from '../models/productModel.js';
+
+export const getCartByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Kiểm tra tính hợp lệ của userId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid userId' });
+    }
+
+    // Tìm giỏ hàng của người dùng
+    const cart = await CartModel.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    // Lấy thông tin chi tiết của sản phẩm
+    const populatedItems = await Promise.all(
+      cart.items.map(async (item) => {
+        const product = await ProductModel.findOne({ productId: item.productId });
+        return {
+          ...item.toObject(),
+          product,
+        };
+      })
+    );
+
+    res.status(200).json({
+      ...cart.toObject(),
+      items: populatedItems,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Cannot get cart', error: error.message });
+  }
+};
 
 export const addToCart = async (req, res) => {
   const { userId, productId, size, color, quantity } = req.body;
