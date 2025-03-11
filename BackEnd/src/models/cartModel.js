@@ -9,9 +9,17 @@ const cartSchema = new mongoose.Schema(
     },
     items: [
       {
-        productVariationId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'ProductVariation',
+        productId: {
+          type: Number,
+          ref: 'Product',
+          required: true,
+        },
+        size: {
+          type: String,
+          required: true,
+        },
+        color: {
+          type: String,
           required: true,
         },
         quantity: {

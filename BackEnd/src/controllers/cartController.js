@@ -1,13 +1,24 @@
 import CartModel from '../models/cartModel.js';
-import ProductVariationModel from '../models/productVariationsModel.js';
+import ProductModel from '../models/productModel.js';
 
 export const addToCart = async (req, res) => {
-  const { userId, productVariationId, quantity } = req.body;
+  const { userId, productId, size, color, quantity } = req.body;
+
+  // Kiểm tra tính hợp lệ của productId
+  if (!Number.isInteger(productId)) {
+    return res.status(400).json({ message: 'Invalid productId' });
+  }
 
   try {
+    // Kiểm tra xem sản phẩm có tồn tại không
+    const product = await ProductModel.findOne({ productId });
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
     // Kiểm tra xem biến thể sản phẩm có tồn tại không
-    const productVariation = await ProductVariationModel.findById(productVariationId);
-    if (!productVariation) {
+    const variation = product.variations.find((v) => v.size === size && v.color === color);
+    if (!variation) {
       return res.status(404).json({ message: 'Product variation not found' });
     }
 
@@ -16,20 +27,22 @@ export const addToCart = async (req, res) => {
 
     if (cart) {
       // Nếu giỏ hàng đã tồn tại, kiểm tra xem biến thể sản phẩm đã có trong giỏ hàng chưa
-      const itemIndex = cart.items.findIndex((item) => item.productVariationId.toString() === productVariationId);
+      const itemIndex = cart.items.findIndex(
+        (item) => item.productId === productId && item.size === size && item.color === color
+      );
 
       if (itemIndex > -1) {
         // Nếu biến thể sản phẩm đã có trong giỏ hàng, cập nhật số lượng
         cart.items[itemIndex].quantity += quantity;
       } else {
         // Nếu biến thể sản phẩm chưa có trong giỏ hàng, thêm biến thể sản phẩm vào giỏ hàng
-        cart.items.push({ productVariationId, quantity });
+        cart.items.push({ productId, size, color, quantity });
       }
     } else {
       // Nếu giỏ hàng chưa tồn tại, tạo giỏ hàng mới
       cart = new CartModel({
         userId,
-        items: [{ productVariationId, quantity }],
+        items: [{ productId, size, color, quantity }],
       });
     }
 
