@@ -76,7 +76,7 @@ export default function Home() {
               </Tabs>
             </div>
           </div>
-              <ProductsSlider items={4} listProducts={listProducts} />
+              <ProductsSlider listProducts={listProducts} />
         </div>
       </section>
 

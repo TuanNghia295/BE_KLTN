@@ -1,11 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family: BeautiqueDisplay-Regular;
+    src: url(../src/assets/BeautiqueDisplay-Regular.otf);
+}
+
 
 * {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    font-family: 'BeautiqueDisplay-Regular';
 }
 
 body::-webkit-scrollbar {

@@ -6,12 +6,12 @@ import AccountSlidebar from '../../components/AccountSlidebar';
 const MyAccount = () => {
   return (
     <section className='py-10 w-full'>
-        <div className='container flex gap-5'>
-            <div className='col1 w-[20%]'>
+        <div className='container flex flex-col xl:flex-row gap-5'>
+            <div className='col1 w-full xl:w-[20%]'>
                 <AccountSlidebar/>
             </div>
 
-            <div className='col2 w-[80%]'>
+            <div className='col2 w-full xl:w-[80%]'>
                 <div className='card bg-white p-5 rounded-md'>
                     <h1 className='text-[22px] font-[600]'>MY PROFILE</h1>
                     <form className='mt-5'>

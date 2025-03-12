@@ -6,17 +6,17 @@ import '../Orders/style.css'
 const Orders = () => {
   return (
     <section className='py-10 w-full'>
-        <div className='container flex gap-5'>
-            <div className='col1 w-[20%]'>
+        <div className='container flex flex-col xl:flex-row gap-5'>
+            <div className='col1 w-full xl:w-[20%]'>
                 <AccountSlidebar/>
             </div>
 
-            <div className='col2 w-[80%]'>
+            <div className='col2 w-full xl:w-[80%]'>
                 <div className='card bg-white p-5 rounded-md'>
                     <h1 className='text-[22px] text-black font-[600]'>MY ORDERS</h1>
                     <p>Total: 1 orders</p>
 
-                    <table class="min-w-full border border-gray-300 divide-y divide-gray-200 mt-3">
+                    <table class="border border-gray-300 divide-y divide-gray-200 mt-3">
                         <thead class="bg-gray-100">
                             <tr>
                             <th class="px-4 py-2 text-left text-gray-600 font-medium">Details</th>
