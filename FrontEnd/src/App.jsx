@@ -14,6 +14,8 @@ import Cart from './pages/Cart/index.jsx';
 import CheckOut from './pages/CheckOut/index.jsx';
 import MyAccount from './pages/MyAccount/index.jsx';
 import Orders from './pages/Orders/index.jsx';
+import MyListPage from './pages/MyListPage/index.jsx';
+import VerifyAccount from './pages/VerifyAccount/index.jsx';
 
 export const MyContext = createContext();
 
@@ -47,15 +49,18 @@ export default function App() {
       
       <Routes>
         <Route path="/" exact={true} element={<MainLayout><Home /></MainLayout>} />
-        <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
-        <Route path="/listing/:category/:subcategory" element={<MainLayout><ProductListing /></MainLayout>} />
         <Route path={"/product/:id"} exact={true} element={<MainLayout><ProductDetails/></MainLayout>} />
         <Route path={"/login"} exact={true} element={<Login/>} />
         <Route path={"/register"} exact={true} element={<Register/>} />
+        <Route path={"/verify"} exact={true} element={<VerifyAccount/>} />
         <Route path={"/cart"} exact={true} element={<MainLayout><Cart/></MainLayout>} />
         <Route path={"/checkout"} exact={true} element={<MainLayout><CheckOut/></MainLayout>} />
         <Route path={"/my-account"} exact={true} element={<MainLayout><MyAccount/></MainLayout>} />
+        <Route path={"/my-list"} exact={true} element={<MainLayout><MyListPage/></MainLayout>} />
         <Route path={"/my-orders"} exact={true} element={<MainLayout><Orders/></MainLayout>} />
+        <Route path="/listing" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
+        <Route path="/listing/:category/:subcategory" element={<MainLayout><ProductListing /></MainLayout>} />
       </Routes>
       
       <Drawer open={openCartPanel} onClose={toggleCartPanel(false)} anchor={"right"} className='cartPanel'>

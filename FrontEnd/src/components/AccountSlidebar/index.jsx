@@ -2,7 +2,6 @@ import React from 'react'
 import { FaCloudUploadAlt } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import { Button } from '@mui/material'
-import { Link } from 'react-router-dom'
 
 const AccountSlidebar = () => {
   return (
@@ -22,7 +21,7 @@ const AccountSlidebar = () => {
 
         </div>
 
-        <ul className='list-none myAccountTabs'> 
+        <ul className='list-none myAccountTabs grid grid-cols-2 xl:grid-cols-1 gap-1'> 
             <li className='w-full'>
                 <NavLink to='/my-account' exact={true} activeClassname="isActive">
                 <Button className='w-full !text-black !bg-[#f1f1f1] !my-1 !rounded-none flex gap-2 items-center'>My Profile</Button>
@@ -30,7 +29,9 @@ const AccountSlidebar = () => {
             </li>
 
             <li className='w-full'>
+                <NavLink to='/my-list' exact={true} activeClassname="isActive">
                 <Button className='w-full !text-black !bg-[#f1f1f1] !my-1 !rounded-none flex gap-2 items-center'>My List</Button>
+                </NavLink>
             </li>
 
             <li className='w-full'>

@@ -1,0 +1,88 @@
+digraph ERD {
+	rankdir=LR size=10
+	User [label="User
+----------------------
+id (PK)
+username
+password
+email
+role
+createdAt
+updatedAt" shape=box]
+	Categories [label="Categories
+----------------------
+id (PK)
+type" shape=box]
+	Product [label="Product
+----------------------
+id (PK)
+adminId (FK)
+name
+price
+description
+categoryId (FK)
+imageUrl
+createdAt
+updatedAt" shape=box]
+	Product_Variation [label="Product_Variation
+----------------------
+id (PK)
+productId (FK)
+size
+color
+amount" shape=box]
+	Cart [label="Cart
+----------------------
+id (PK)
+userId (FK)
+createdAt
+updatedAt" shape=box]
+	Cart_Item [label="Cart_Item
+----------------------
+id (PK)
+cartId (FK)
+productVariationId (FK)
+quantity" shape=box]
+	Order [label="Order
+----------------------
+id (PK)
+userId (FK)
+totalPrice
+status
+createdAt
+updatedAt" shape=box]
+	Order_Item [label="Order_Item
+----------------------
+id (PK)
+orderId (FK)
+productVariationId (FK)
+price" shape=box]
+	Payment [label="Payment
+----------------------
+id (PK)
+orderId (FK, Unique)
+paymentMethod
+transactionId
+status
+createdAt
+updatedAt" shape=box]
+	Refund [label="Refund
+----------------------
+id (PK)
+orderId (FK, Unique)
+reason
+status
+createdAt
+updatedAt" shape=box]
+	User -> Product [label="1 → n (Admin quản lý)"]
+	Categories -> Product [label="1 → n (Thuộc danh mục)"]
+	Product -> Product_Variation [label="1 → n (Biến thể)"]
+	User -> Cart [label="1 → 1 (Mỗi user có 1 cart)"]
+	Cart -> Cart_Item [label="1 → n (Chứa nhiều sản phẩm)"]
+	Product_Variation -> Cart_Item [label="1 → n (Sản phẩm trong giỏ)"]
+	User -> Order [label="1 → n (User đặt nhiều order)"]
+	Order -> Order_Item [label="1 → n (Order có nhiều sản phẩm)"]
+	Product_Variation -> Order_Item [label="1 → n (Sản phẩm trong order)"]
+	Order -> Payment [label="1 → 1 (Order có thanh toán)"]
+	Order -> Refund [label="1 → 1 (Có thể được hoàn tiền)"]
+}

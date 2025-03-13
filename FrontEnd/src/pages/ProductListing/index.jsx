@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SlideBar from '../../components/SlideBar';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -13,8 +13,21 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FaAngleDown } from 'react-icons/fa';
 import Pagination from '@mui/material/Pagination';
+// Call Api Get Product
+import { getAllProducts } from '../../apis/productsService';
+
 
 const ProductListing = () => {
+  
+  const [listProducts, setListProducts] = useState([])
+  
+
+  useEffect(() => {
+    setListProducts([]);
+    getAllProducts().then((response) => {
+        setListProducts(response.products)
+    })
+  }, [])
 
   const [itemView, setItemView] = useState('grid');
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -102,14 +115,13 @@ const ProductListing = () => {
             <div className={`grid ${itemView === 'grid' ? 'grid-cols-2 xl:grid-cols-4' : 'grid-cols-1'} gap-4`}>
               {itemView === 'grid' ? (
                 <>
-                  <ProductItem />
-                  <ProductItem />
-                  <ProductItem />
-                  <ProductItem />
-                  <ProductItem />
-                  <ProductItem />
-                  <ProductItem />
-                  <ProductItem />
+                    {listProducts.length === 0 ? (
+                      <p>Không có sản phẩm nào.</p>
+                    ) : (
+                      listProducts.map((product) => (
+                        <ProductItem key={product._id} product={product} />
+                      ))
+                    )}
                 </>
               ) : (
                 <>
