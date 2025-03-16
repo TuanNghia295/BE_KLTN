@@ -3,6 +3,7 @@ import productRouter from './productRouter.js';
 import authRouter from './authRouter.js';
 import bannerRouter from './bannerRouter.js';
 import cartRouter from './cartRouter.js';
+import categoryRouter from './categoryRouter.js';
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/products', productRouter);
 router.use('/banners', bannerRouter);
 router.use('/auth', authRouter);
 router.use('/cart', cartRouter);
+router.use('/category', categoryRouter);
 
 export default router;
