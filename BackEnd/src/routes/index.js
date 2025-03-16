@@ -4,6 +4,7 @@ import authRouter from './authRouter.js';
 import bannerRouter from './bannerRouter.js';
 import cartRouter from './cartRouter.js';
 import categoryRouter from './categoryRouter.js';
+import paymentRouter from './paymentRouter.js';
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use('/banners', bannerRouter);
 router.use('/auth', authRouter);
 router.use('/cart', cartRouter);
 router.use('/category', categoryRouter);
+router.use('/payment', paymentRouter);
 
 export default router;
