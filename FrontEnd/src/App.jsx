@@ -16,6 +16,7 @@ import MyAccount from './pages/MyAccount/index.jsx';
 import Orders from './pages/Orders/index.jsx';
 import MyListPage from './pages/MyListPage/index.jsx';
 import VerifyAccount from './pages/VerifyAccount/index.jsx';
+import MyAddress from './pages/MyAddress/index.jsx';
 
 export const MyContext = createContext();
 
@@ -58,6 +59,7 @@ export default function App() {
         <Route path={"/my-account"} exact={true} element={<MainLayout><MyAccount/></MainLayout>} />
         <Route path={"/my-list"} exact={true} element={<MainLayout><MyListPage/></MainLayout>} />
         <Route path={"/my-orders"} exact={true} element={<MainLayout><Orders/></MainLayout>} />
+        <Route path={"/my-address"} exact={true} element={<MainLayout><MyAddress/></MainLayout>} />
         <Route path="/listing" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
         <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
         <Route path="/listing/:category/:subcategory" element={<MainLayout><ProductListing /></MainLayout>} />

@@ -42,9 +42,11 @@ export default function Home() {
             <h3 className="font-bold text-[16px]">Sabrina ionescu</h3>
             <h3 className="text-black text-[48px] font-[800] uppercase">Ride Easy</h3>
             <p className="mb-2">That’s the sound of Sabrina Ionescu changing the game.</p>
+            <Link to='/listing'>
             <Button variant="contained" className="!bg-black !rounded-full">
               Shop
             </Button>
+            </Link>
           </div>
           <Link>
             <img src={Banner3} alt="running woman"></img>
@@ -116,9 +118,11 @@ export default function Home() {
             <h3 className="font-bold text-[16px]">Women’s Air Jordan 4RM</h3>
             <h3 className="text-black text-[48px] font-[800] uppercase">Ride Easy</h3>
             <p className="mb-2">This new take on a classic comes in a comfortable low profile with iconic style.</p>
+            <Link to='/listing'>
             <Button variant="contained" className="!bg-black !rounded-full">
               Shop
             </Button>
+            </Link>
           </div>
         </div>
       </section>

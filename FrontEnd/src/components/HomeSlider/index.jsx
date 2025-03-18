@@ -39,12 +39,12 @@ const HomeSlider = () => {
       className="mySwiper"
     >
       <SwiperSlide>
-        <Link to={'/jordan'}>
+        <Link to={'/listing'}>
           <img src={jordanImage} alt="Jordan" />
         </Link>
       </SwiperSlide>
       <SwiperSlide>
-        <Link to={'/nike'}>
+        <Link to={'/listing'}>
           <img src={nike} alt="Nike" />
         </Link>
       </SwiperSlide>
