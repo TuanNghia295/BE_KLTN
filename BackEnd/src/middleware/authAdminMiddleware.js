@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const authUserMiddleware = (req, res, next) => {
+const authAdminMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer')) {
@@ -11,7 +11,8 @@ const authUserMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    if (decoded.role !== 'USER') {
+
+    if (decoded.role !== 'ADMIN') {
       return res.status(403).json({ message: 'Forbidden' });
     }
     req.user = decoded;
@@ -21,4 +22,4 @@ const authUserMiddleware = (req, res, next) => {
   }
 };
 
-export default authUserMiddleware;
+export default authAdminMiddleware;

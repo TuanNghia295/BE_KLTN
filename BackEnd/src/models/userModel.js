@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
 // Generate Access Token
 userSchema.method('generateAccessToken', function () {
   return jwt.sign(
-    { _id: this._id, isAdmin: this.isAdmin },
+    { _id: this._id, role: this.role },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: '7d' } // Correct format
   );
@@ -38,7 +38,7 @@ userSchema.method('generateAccessToken', function () {
 // Generate Refresh Token
 userSchema.method('generateRefreshToken', function () {
   return jwt.sign(
-    { _id: this._id, isAdmin: this.isAdmin },
+    { _id: this._id, role: this.role },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '7d' } // Correct format
   );

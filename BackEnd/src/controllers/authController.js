@@ -100,7 +100,7 @@ export const loginAdmin = async (req, res) => {
   await userExist.save();
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true, // chỉ sử dụng httpOnly cookie
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production', // chỉ sử dụng secure ở môi trường production (deploy)
   });
   res.status(200).json({
     fullName: userExist.fullName,

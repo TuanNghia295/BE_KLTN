@@ -8,18 +8,18 @@ import {
   deleteProduct,
   updateProduct,
 } from '../controllers/productController.js';
-import authMiddleware from '../middleware/authMiddleware.js';
 import multer from 'multer';
+import authAdminMiddleware from '../middleware/authAdminMiddleware.js';
 
 const productRouter = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-productRouter.post('/create', authMiddleware, upload.single('imageUrl'), createProduct);
+productRouter.post('/create', authAdminMiddleware, upload.single('imageUrl'), createProduct);
 productRouter.get('/getAllProducts', getAllProducts);
 productRouter.get('/getAllProducts/:categoryId', getAllProductsByCategoryId);
 productRouter.get('/getProductsCount', getAllProductsCount);
 productRouter.get('/getSingleProduct', getSingleProduct);
-productRouter.delete('/:id', authMiddleware, deleteProduct);
-productRouter.put('/update/:id', authMiddleware, updateProduct);
+productRouter.delete('/:id', authAdminMiddleware, deleteProduct);
+productRouter.put('/update/:id', authAdminMiddleware, updateProduct);
 
 export default productRouter;

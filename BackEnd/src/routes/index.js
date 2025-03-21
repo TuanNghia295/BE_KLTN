@@ -5,6 +5,7 @@ import bannerRouter from './bannerRouter.js';
 import cartRouter from './cartRouter.js';
 import categoryRouter from './categoryRouter.js';
 import paymentRouter from './paymentRouter.js';
+import userRouter from './userRouter.js';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.get('/', (req, res) => {
 });
 
 // Sử dụng router.use để kết nối các router con
+router.use('/users', userRouter);
 router.use('/products', productRouter);
 router.use('/banners', bannerRouter);
 router.use('/auth', authRouter);
