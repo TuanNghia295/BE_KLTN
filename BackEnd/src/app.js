@@ -7,6 +7,7 @@ import { createServer } from 'http';
 import defaultRoutes from './routes/index.js'; // Đảm bảo đường dẫn chính xác
 import connectDB from './config/databse.js';
 import cookieParser from 'cookie-parser';
+import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
 const server = createServer(app);
@@ -29,6 +30,7 @@ connectDB();
 
 // Routes
 app.use('/', defaultRoutes);
+app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 3000;

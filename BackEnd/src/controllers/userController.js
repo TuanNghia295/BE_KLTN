@@ -4,11 +4,12 @@ import UserModel from '../models/userModel.js';
 
 export const getListUser = async (req, res) => {
   const { limit, page, q, order } = req.query;
-  // Đổi limit và page từ string sang number
-  const limitNumber = parseInt(limit);
-  const pageNumber = parseInt(page);
 
-  // tạo truy vấn q trên MongoDB với option i dùng để không phân biệt hoa thường
+  // Đổi limit và page từ string sang number
+  const limitNumber = parseInt(limit) || 10; // Giá trị mặc định là 10 nếu không có limit
+  const pageNumber = parseInt(page) || 1; // Giá trị mặc định là 1 nếu không có page
+
+  // Tạo truy vấn q trên MongoDB với option i dùng để không phân biệt hoa thường
   const query = q
     ? {
         $or: [
@@ -16,25 +17,31 @@ export const getListUser = async (req, res) => {
           { userName: { $regex: q, $options: 'i' } },
           { phone: { $regex: q, $options: 'i' } },
         ],
+        role: { $ne: 'ADMIN' }, // Bỏ qua user có role là ADMIN
       }
-    : {};
+    : { role: { $ne: 'ADMIN' } }; // Bỏ qua user có role là ADMIN nếu không có q
+
   const sortBy = order === 'ASC' ? 1 : -1;
 
-  // Đếm tổng số người dùng thõa query
-  const total = await UserModel.countDocuments(query);
+  try {
+    // Đếm tổng số người dùng thỏa query
+    const total = await UserModel.countDocuments(query);
 
-  // Lấy ra danh sách người dùng
-  const userList = await UserModel.find(query)
-    .sort({ createdAt: sortBy }) // Sắp xếp theo thời gian tạo
-    .skip((pageNumber - 1) * limitNumber) // Bỏ qua số lượng phần tử không cần khi phân trang, ví dụ page 2,limit 10 thì bỏ qua 10 phần tử đầu
-    .limit(limitNumber); // Giới hạn số lượng phần tử trả về mỗi trang
+    // Lấy ra danh sách người dùng, bỏ qua user có role là ADMIN
+    const userList = await UserModel.find(query)
+      .sort({ createdAt: sortBy }) // Sắp xếp theo thời gian tạo
+      .skip((pageNumber - 1) * limitNumber) // Bỏ qua số lượng phần tử không cần khi phân trang, ví dụ page 2, limit 10 thì bỏ qua 10 phần tử đầu
+      .limit(limitNumber); // Giới hạn số lượng phần tử trả về mỗi trang
 
-  res.json({
-    data: userList,
-    total,
-    page: pageNumber,
-    limit: limitNumber,
-  });
+    res.json({
+      data: userList,
+      total,
+      page: pageNumber,
+      limit: limitNumber,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error: error.message });
+  }
 };
 
 // Lấy thông tin người dùng hiện tại
@@ -78,13 +85,11 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    // Tìm người dùng trong cơ sở dữ liệu
-    const user = await UserModel.findById(id);
+    // Tìm và xóa người dùng trong cơ sở dữ liệu
+    const user = await UserModel.findByIdAndDelete(id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    // Xóa người dùng
-    await user.remove();
     res.json({ statusCode: 200, message: 'User deleted' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting user', error: error.message });

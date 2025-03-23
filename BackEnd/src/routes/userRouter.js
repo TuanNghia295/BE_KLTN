@@ -9,6 +9,6 @@ userRouter.get('/getAll', authAdminMiddleware, getListUser);
 userRouter.get('/userInfo', authMiddleware, getUserInfo);
 userRouter.patch('/updateUser', authMiddleware, updateUser);
 userRouter.patch('/updateUser/:id', authAdminMiddleware, updateUserById);
-userRouter.get('/delete/:id', authMiddleware, deleteUser);
+userRouter.delete('/delete/:id', authAdminMiddleware, deleteUser);
 
 export default userRouter;

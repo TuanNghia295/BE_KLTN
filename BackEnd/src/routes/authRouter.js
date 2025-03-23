@@ -1,13 +1,25 @@
 import express from 'express';
-import { createUser, login, loginAdmin, logout, refreshToken } from '../controllers/authController.js';
-import authMiddleware from '../middleware/authMiddleware.js';
-import authAdminMiddleware from '../middleware/authAdminMiddleware.js';
+import { check } from 'express-validator';
+import { createUser, login, loginAdmin, refreshToken, logout } from '../controllers/authController.js';
 
 const authRouter = express.Router();
-authRouter.post('/register', createUser);
+
+authRouter.post(
+  '/register',
+  [
+    check('userName').notEmpty().withMessage('User name is required'),
+    check('fullName').notEmpty().withMessage('Full name is required'),
+    check('phone').notEmpty().withMessage('Phone number is required'),
+    check('email').isEmail().withMessage('Email is invalid'),
+    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    check('role').notEmpty().withMessage('Role is required'),
+  ],
+  createUser
+);
+
 authRouter.post('/login', login);
 authRouter.post('/login/admin', loginAdmin);
-authRouter.post('/refresh_token', authAdminMiddleware, refreshToken); // phải có accessToken đúng thì mới sử dụng được api này
-authRouter.post('/logout', authAdminMiddleware, logout); // phải có accessToken đúng thì mới sử dụng được api này
+authRouter.post('/refresh_token', refreshToken);
+authRouter.post('/logout', logout);
 
 export default authRouter;

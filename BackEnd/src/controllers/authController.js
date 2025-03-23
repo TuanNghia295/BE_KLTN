@@ -1,40 +1,56 @@
 import bcrypt from 'bcryptjs';
 import UserModel from '../models/userModel.js';
-
+import { validationResult } from 'express-validator';
 // Tạo user [POST] /api/register
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { userName, fullName, phone, email, password, role } = req.body;
-  const user = new UserModel({
-    userName,
-    fullName,
-    phone,
-    email,
-    password,
-    role,
-  });
-  // Sử dụng jwt để mã hóa password
-  user.password = await bcrypt.hash(password, 12);
-  // Tạo access token và refresh token
-  const accessToken = user.generateAccessToken();
-  const refreshToken = user.generateRefreshToken();
 
-  user.refreshToken = refreshToken;
-
-  // truyền refresh token vào trong database
   try {
+    // Kiểm tra xem có truyền password không
+    if (!password) {
+      return res.status(400).json({ message: 'Password is required' });
+    }
+
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Tạo người dùng mới
+    const user = new UserModel({
+      userName,
+      fullName,
+      phone,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    // Tạo access token và refresh token
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+
+    // Lưu người dùng mới vào cơ sở dữ liệu
     const newUser = await user.save();
+
     // Lưu refresh token vào httpOnly cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // chỉ sử dụng secure ở môi trường production (deploy)
     });
+
     res.status(201).json({
       statusCode: 201,
       user: newUser,
       message: 'Tạo tài khoản thành công',
     });
   } catch (error) {
-    res.status(409).json({ statusCode: 409, message: error.message });
+    next(error); // Chuyển lỗi tới middleware xử lý lỗi
   }
 };
 
