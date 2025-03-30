@@ -8,7 +8,7 @@ export const createUser = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { userName, fullName, phone, email, password, role } = req.body;
+  const { userName, fullName, phone, email, password, role, address } = req.body;
 
   try {
     // Kiểm tra xem có truyền password không
@@ -27,6 +27,7 @@ export const createUser = async (req, res, next) => {
       email,
       password: hashedPassword,
       role,
+      address,
     });
 
     // Tạo access token và refresh token

@@ -10,6 +10,7 @@ authRouter.post(
     check('userName').notEmpty().withMessage('User name is required'),
     check('fullName').notEmpty().withMessage('Full name is required'),
     check('phone').notEmpty().withMessage('Phone number is required'),
+    check('address').notEmpty().withMessage('Address is required'),
     check('email').isEmail().withMessage('Email is invalid'),
     check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
     check('role').notEmpty().withMessage('Role is required'),
