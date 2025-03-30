@@ -16,12 +16,6 @@ export const getAllCategory = async (req, res) => {
 // POST /category/create
 export const createCategory = async (req, res) => {
   const { type } = req.body;
-  const role = req.headers.role;
-
-  if (role !== ROLE.ADMIN) {
-    return res.status(403).json({ message: 'Permission denied' });
-  }
-
   try {
     const category = new CategoryModel({ type });
     await category.save();
@@ -36,15 +30,6 @@ export const createCategory = async (req, res) => {
 export const updateCategory = async (req, res) => {
   // Nhận categoryId từ body
   const { categoryId, type } = req.body;
-  const role = req.headers.role;
-
-  // Kiểm tra role có phải là ADMIN không
-  if (role !== ROLE.ADMIN) {
-    return res.status(403).json({
-      statusCode: 403,
-      message: 'You are not allowed to perform this action',
-    });
-  }
 
   // Kiểm tra categoryId có tồn tại không
   const category = await CategoryModel.findById(categoryId);
@@ -72,9 +57,6 @@ export const updateCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
   const { categoryId } = req.body;
   const role = req.headers.role;
-  if (role !== ROLE.ADMIN) {
-    return res.status(403).json({ message: 'Permission denied' });
-  }
   try {
     await CategoryModel.findByIdAndDelete(categoryId);
     res.status(204).json({ statusCode: 204, message: 'Delete category successfully' });

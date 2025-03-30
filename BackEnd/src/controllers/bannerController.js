@@ -41,16 +41,6 @@ const createBanner = async (req, res) => {
   const storage = multer.memoryStorage();
   multer({ storage });
 
-  // Kiểm tra role có phải là ADMIN không
-  const role = req.headers.role;
-
-  if (role !== ROLE.ADMIN) {
-    return res.status(403).json({
-      success: false,
-      message: 'You are not allowed to perform this action',
-    });
-  }
-
   // Lấy file từ request
   const imageFile = req.file;
   console.log('imageFile', imageFile);
@@ -94,16 +84,6 @@ const createBanner = async (req, res) => {
 // Xóa banner
 const deleteBanner = async (req, res) => {
   const { id } = req.params;
-
-  // Kiểm tra role có phải là ADMIN không
-  const role = req.headers.role;
-
-  if (role !== ROLE.ADMIN) {
-    return res.status(403).json({
-      success: false,
-      message: 'You are not allowed to perform this action',
-    });
-  }
 
   BannerModel.findByIdAndDelete({ id })
     .then((banner) => {

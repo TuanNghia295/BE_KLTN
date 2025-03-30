@@ -125,6 +125,6 @@ export const updateUserById = async (req, res) => {
     const updatedUser = await UserModel.findById(id).select('-password');
     res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating user', error: error.message });
+    res.status(500).json({ errorCode: error.code, message: 'Error updating user', error: error.message });
   }
 };
