@@ -15,17 +15,13 @@ export const StoreProvider = ({ children }) => {
         setUserInfo(null)
     }
 
-    const accesstoken = Cookies.get('accesstoken')
-
-    const fetchUserInfo = () => {
-        getUserInfo(accesstoken).then((response) => {
-            setUserInfo(response)
-         })
-    }
+    const token = localStorage.getItem('accesstoken')
 
     useEffect(() => {
-        if(accesstoken) {
-            fetchUserInfo()
+        if(token) {
+            getUserInfo(token).then((response) => {
+                setUserInfo(response)
+             })
         }
     }, [])
 

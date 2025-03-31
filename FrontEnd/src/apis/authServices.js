@@ -7,8 +7,7 @@ export const login = async ({ phone, password }) => {
     withCredentials: true, // Để gửi cookie
   });
 
-  // Lưu accessToken vào cookie
-  document.cookie = `accesstoken=${response.data.accessToken}; path=/; SameSite=Lax`;
+  localStorage.setItem("accesstoken", response.data.accessToken);
 
   return response.data;
 };
@@ -25,6 +24,7 @@ export const getUserInfo = async (accesstoken) => {
 
 export const logout = async () => {
   const response = await axiosClient.post('/auth/logout')
-  Cookies.remove('accesstoken')
+  localStorage.removeItem("accesstoken", response.data.accessToken);
+
   return response
 }
