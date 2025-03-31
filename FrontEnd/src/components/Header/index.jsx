@@ -12,6 +12,10 @@ import { IoMdMenu } from 'react-icons/io';
 import { useContext } from 'react';
 import { MyContext } from '../../App';
 import { useStoreProvider } from '../../contexts/StoreProvider'
+import { Button } from '@mui/material';
+//Call API
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../apis/authServices'
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -31,8 +35,13 @@ const CustomTooltip = styled(({ className, ...props }) => <Tooltip {...props} cl
 
 export default function Header() {
   const context = useContext(MyContext);
-  const { userInfo } = useStoreProvider()
-  console.log(userInfo)
+  const { userInfo, clearInfo } = useStoreProvider()
+
+  //Handle Logout
+  const handleLogout = async () => {
+    await logout();
+    clearInfo();
+  }
   
   return (
     <header className="bg-white">
@@ -81,15 +90,24 @@ export default function Header() {
           <div className="col3 w-[30%] flex items-center pl-7">
             <ul className="flex items-center justify-end gap-3 w-full">
               {/* Đăng nhập */}
-              <li className="list-none hidden xl:block">
-                <Link to={'/login'} className="link transition text-[14px] font-[500]">
-                  Sign In
-                </Link>
-                &nbsp; | &nbsp;
-                <Link to={'/register'} className="link transition text-[14px] font-[500]">
-                  Sign Up
-                </Link>
-              </li>
+              { userInfo ? (
+                <>
+                <p>Hi, {userInfo.fullName}</p>
+                <Button onClick={handleLogout}>Logout</Button>
+                </>
+              ) : (
+                <>
+                  <li className="list-none hidden xl:block">
+                    <Link to={'/login'} className="link transition text-[14px] font-[500]">
+                      Sign In
+                    </Link>
+                    &nbsp; | &nbsp;
+                    <Link to={'/register'} className="link transition text-[14px] font-[500]">
+                      Sign Up
+                    </Link>
+                  </li>
+                </>
+                ) }
               {/*Menu Responsive*/}
               <li className="xl:hidden">
                 <StyledEngineProvider injectFirst>

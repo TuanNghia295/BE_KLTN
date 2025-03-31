@@ -7,18 +7,30 @@ export const StoreContext = createContext()
 export const StoreProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null)
 
+    const getInfo = (data) => {
+        setUserInfo(data)
+    }
+
+    const clearInfo = () => {
+        setUserInfo(null)
+    }
+
     const accesstoken = Cookies.get('accesstoken')
+
+    const fetchUserInfo = () => {
+        getUserInfo(accesstoken).then((response) => {
+            setUserInfo(response)
+         })
+    }
 
     useEffect(() => {
         if(accesstoken) {
-            getUserInfo(accesstoken).then((response) => {
-                setUserInfo(response)
-             })
+            fetchUserInfo()
         }
     }, [])
 
     return (
-        <StoreContext.Provider value={{userInfo}}>
+        <StoreContext.Provider value={{userInfo, getInfo, clearInfo}}>
             {children}
         </StoreContext.Provider>
     )

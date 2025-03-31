@@ -20,13 +20,14 @@ const Login = () => {
 
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+    const { getInfo } = useStoreProvider();
 
     // Sử dụng mutation từ React Query
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-        console.log(data)
         alert("Đăng nhập thành công!");
+        getInfo(data);
         navigate('/'); // Chuyển hướng sau khi đăng nhập
         },
         onError: (error) => {
