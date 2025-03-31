@@ -10,16 +10,33 @@ const ProductItem = ({product}) => {
   return (
     <div className="productItem rounded-md w-[100%] overflow-hidden bg-white text-black shadow-lg relative">
       <div className="group imgWrapper overflow-hidden rounded-none relative">
-        <Link to={`/product/${product._id}`}>
-          <div className="img h-[250px] overflow-hidden">
-            <img
+        <Link to={`/product/${product.name}`}>
+          <div className="img h-[150px] md:h-[250px] overflow-hidden">
+            {/* <img
               src={product.imageUrl}
               className="w-full h-full object-cover"
             />
             <img
               src={product.imageUrl}
               className="w-full h-full object-cover absolute top-[0px] left-[0px] opacity-0 transition-all duration-1000 group-hover:opacity-100"
-            />
+            /> */}
+            {Array.isArray(product.images) && product.images.length > 0 ? (
+              product.images.map((image) => (
+                <>
+                  <img
+                    src={image.url}
+                    alt={image.publicId}
+                    className='w-full h-full object-cover'
+                  />
+                  <img
+                  src={image.url}
+                  className="w-full h-full object-cover absolute top-[0px] left-[0px] opacity-0 transition-all duration-1000 group-hover:opacity-100"
+                  />
+                </>
+              ))
+            ) : (
+              <p>No images available</p>
+            )}
           </div>
         </Link>
 
@@ -41,7 +58,7 @@ const ProductItem = ({product}) => {
       <div className="info p-3">
         <h6 className="text-[14px]">
           <Link to="/" className="link transition-all">
-            Footwear
+            {product.categoryId.type}
           </Link>
         </h6>
         <h3 className="text-[16px] title mt-2 font-[500] mb-2">

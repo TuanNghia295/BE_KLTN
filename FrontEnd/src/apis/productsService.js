@@ -5,7 +5,7 @@ export const getAllProducts = async () => {
     return response.data;
 }
 
-export const getDetailProducts = async (productId) => {
-    const response = await axiosClient.get(`/products/getSingleProduct/${productId.id}`)
+export const getDetailProducts = async (productName) => {
+    const response = await axiosClient.get(`/products/getSingleProduct?name=${productName.name}`)
     return response.data
 }

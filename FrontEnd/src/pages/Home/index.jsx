@@ -12,6 +12,7 @@ import Banner2 from '../../assets/banner/banner2.jpg';
 import Banner3 from '../../assets/banner/banner3.jpg';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import '../Home/style.css'
 // Call API GET PRODUCTS
 import { getAllProducts } from '../../apis/productsService';
 
@@ -31,6 +32,16 @@ export default function Home() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const getColumns = () => (window.innerWidth < 768 ? 1 : 4);
+  
+  const [columns, setColumns] = useState(getColumns());
+
+  useEffect(() => {
+    const handleResize = () => setColumns(getColumns());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);  
 
   return (
     <div className="bg-white">
@@ -59,8 +70,20 @@ export default function Home() {
       <section className="bg-white py-8">
         <div className="container">
           <div className="flex items-center justify-between">
-            <div className="leftSec w-[30%]">
-              <h2 className="text-[14px] xl:text-[20px] font-[600]">Popular Products</h2>
+            <div className="leftSec w-[50%]">
+              <h2 className="text-[20px] font-[600]">Popular Products</h2>
+            </div>
+
+            <div className='rightSec w-[40%] overflow-x-scroll no-scrollbar flex'>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
+              <span>Fashion</span>
             </div>
 
             {/* <div className="rightSec">
@@ -131,7 +154,7 @@ export default function Home() {
         <div className="container">
           <h2 className="text-[20px] font-[600] mb-4">Shop By Sport</h2>
           <Swiper
-            slidesPerView={3}
+            slidesPerView={columns}
             spaceBetween={12}
             className="blogSlider"
             loop={true}

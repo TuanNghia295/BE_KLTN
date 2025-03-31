@@ -91,7 +91,7 @@ export default function Header() {
             <Search />
           </div>
 
-          <div className="col3 w-full md:w-[30%] flex items-center pl-7">
+          <div className="col3 w-full xl:w-[30%] flex items-center pl-7">
             <ul className="flex items-center justify-end gap-3 w-full">
               {/* Đăng nhập */}
               <li className="list-none block cursor-pointer">

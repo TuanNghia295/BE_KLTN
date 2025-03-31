@@ -14,14 +14,15 @@ import { getDetailProducts } from '../../apis/productsService';
 import { useParams } from 'react-router-dom';
 
 const ProductDetails = () => {
-  const productId  = useParams();  
+  const productName  = useParams(); 
+   
   const [detailProduct, setDetailProduct] = useState([])
 
   useEffect(() => {
-    getDetailProducts(productId).then((response) => {
-      setDetailProduct(response)
+    getDetailProducts(productName).then((response) => {
+      setDetailProduct(response.singleProduct)
     })
-  },[productId])
+  },[productName])
 
   console.log(detailProduct)
 
@@ -41,32 +42,33 @@ const ProductDetails = () => {
         </Breadcrumbs>
       </div>
       <section className="bg-white py-5">
+      {detailProduct.map((item) => (
         <div className="container flex gap-4 flex-col ">
           {/* Hình ảnh khác của sản phẩm hiện tại */}
 
           <div className="flex justify-evenly xl:flex-row flex-col gap-4 xl:gap-0">
             {/* Hình ảnh sản phẩm */}
             <div className="productZoomContainer custom-scrollbar w-[100%] xl:w-[40%]  xl:h-[auto] overflow-x-scroll overflow-y-hidden xl:overflow-x-hidden ">
-              <Gallery imageProduct={detailProduct.imageUrl} />
+              <Gallery imageProduct={item.images} />
             </div>
 
             {/* Loại sản phẩm, size addtoCart và description */}
             <div className="p-5  w-[100%] xl:w-[35%] ">
-              <h3>Footwear</h3>
-              <h1 className="text-[30px] font-[600] text-black">{detailProduct.name}</h1>
-              <p className="text-[20px] font-[600] text-primary">${detailProduct.price}</p>
+              <h1 className="text-[30px] font-[600] text-black">{item.name}</h1>
+              <p className="text-[20px] font-[600] text-primary">${item.price}</p>
               {/* Size component */}
               <h1 className="text-lg font-[500] mb-1 text-black">Select Size</h1>
               <div className='flex gap-3'>
-                  {Array.isArray(detailProduct.variations) && detailProduct.variations.length > 0 ? (
-                    detailProduct.variations.map((variation) => (
+                  {Array.isArray(item.variations) && item.variations.length > 0 ? (
+                    item.variations.map((variation) => (
                       <>
-                        <div key={variation._id}>
+                        <div className='flex flex-col' key={variation._id}>
                           <button
                               className="size-button border min-w-16 border-black text-black bg-white hover:bg-black hover:text-white px-4 py-2 rounded transition duration-300"
                             >
                               {variation.size}
                           </button>
+                          <p>{variation.color}</p>
                         </div>
                       </>
                     ))
@@ -89,6 +91,7 @@ const ProductDetails = () => {
             <HomeCartSlider slidesPerView={slidesPerView} />
           </section>
         </div>
+      ))}
       </section>
     </div>
   );

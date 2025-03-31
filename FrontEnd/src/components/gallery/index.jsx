@@ -12,8 +12,18 @@ import ProductZoom from '../ProductZoom';
 
 export default function Gallery({imageProduct}) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  console.log(imageProduct)
   return (
     <>
+      {/* {Array.isArray(imageProduct) && imageProduct.length > 0 ? (
+              imageProduct.map((image) => (
+                <>
+
+                </>
+              ))
+      ) : (
+              <p>No images available</p>
+      )}       */}
       <Swiper
         style={{
           '--swiper-navigation-color': '#fff',
@@ -27,11 +37,19 @@ export default function Gallery({imageProduct}) {
         className="mySwiper2"
         lazyPreloadPrevNext={true}
       >
-        <SwiperSlide>
-          <ProductZoom
-            img={imageProduct}
-          />
-        </SwiperSlide>
+        {Array.isArray(imageProduct) && imageProduct.length > 0 ? (
+              imageProduct.map((image) => (
+                <>
+                  <SwiperSlide>
+                    <ProductZoom
+                      img={image.url}
+                    />
+                  </SwiperSlide>
+                </>
+              ))
+        ) : (
+                <p>No images available</p>
+        )}         
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
@@ -43,9 +61,17 @@ export default function Gallery({imageProduct}) {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper mt-2"
       >
-        <SwiperSlide>
-          <img src={imageProduct} />
-        </SwiperSlide>
+        {Array.isArray(imageProduct) && imageProduct.length > 0 ? (
+              imageProduct.map((image) => (
+                <>
+                  <SwiperSlide>
+                  <img src={image.url} />
+                </SwiperSlide>
+                </>
+              ))
+        ) : (
+                <p>No images available</p>
+        )} 
       </Swiper>
     </>
   );

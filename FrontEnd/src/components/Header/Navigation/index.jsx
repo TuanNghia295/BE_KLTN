@@ -26,7 +26,7 @@ const Navigation = () => {
 
           {/* Điều hướng chính */}
           <div className="col_2 w-[65%]">
-            <ul className="flex items-center justify-center gap-5 nav">
+            <ul className="flex items-center justify-center gap nav">
               <li className="list-none">
                 <Link to={'/'} className="link transition text-[16px] font-[500]">
                   <Button className="link transition font-[500] hover:!text-primary !py-4">Home</Button>

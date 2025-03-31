@@ -31,7 +31,7 @@ const Login = () => {
         onMutate: () => setLoading(true), 
         onSuccess: (data) => {
             toast.success("Đăng nhập thành công", {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -44,7 +44,7 @@ const Login = () => {
         },
         onError: (error) => {
             toast.error(error.response?.data?.message || "❌ Đăng nhập thất bại!", {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -103,7 +103,7 @@ const Login = () => {
                         </div>
                         
                         <div className='flex items-center mt-5'>
-                                <Button className={`btn-Login w-full ${loading ? "!bg-black !text-[#fff]" : ""}`} type="submit">{loading ? "Loading..." : "Login"}</Button>
+                                <Button className={`btn-Login w-full ${loading ? " !text-[#fff]" : ""}`} type="submit">{loading ? "Loading..." : "Login"}</Button>
                         </div>
                             
                         <div className='flex w-full items-center mt-5'>
