@@ -18,6 +18,7 @@ import MyListPage from './pages/MyListPage/index.jsx';
 import VerifyAccount from './pages/VerifyAccount/index.jsx';
 import MyAddress from './pages/MyAddress/index.jsx';
 
+import { ToastContainer } from "react-toastify";
 import { StoreProvider } from './contexts/StoreProvider.jsx'
 
 export const MyContext = createContext();
@@ -48,6 +49,7 @@ export default function App() {
   return (
     <>
     <StoreProvider>
+      <ToastContainer />
       <BrowserRouter>
       <MyContext.Provider value={values}>
         

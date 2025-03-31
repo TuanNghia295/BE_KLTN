@@ -2,22 +2,25 @@ import React from 'react'
 import { FaCloudUploadAlt } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import { Button } from '@mui/material'
-
+import { useStoreProvider } from '../../contexts/StoreProvider'
+import Avatar from '@mui/material/Avatar';
 const AccountSlidebar = () => {
+    const { userInfo } = useStoreProvider()
+
   return (
     <div className='card bg-white shadow-md rounded-md p-5'>
         <div className='w-full p-3 flex items-center justify-center flex-col border-b border-[#f1f1f1] mb-2'>
 
             <div className='w-[100px] h-[100px] rounded-full overflow-hidden mb-4 relative'>
-                <img src="https://cdn.discordapp.com/attachments/1327924387420311573/1332593402486980648/SBTown.png?ex=67c5f091&is=67c49f11&hm=e257bd507c4c022bc49009b0acb50d3c2095586bafb6fb7f3f5684c41fafaa16&" />
+                <Avatar sx={{ width: 100, height: 100 }} alt={userInfo ? (userInfo.fullName) : ("Default")} src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg" />
                 <div className='overlay w-full h-full absolute top-0 left-0 z-50 bg-[#000000ab] flex items-center justify-center'>
                     <FaCloudUploadAlt className='text-[#fff]'/>
                     <input type="file" className='absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer'></input>
                 </div>
             </div>
 
-            <h3 className='text-black text-[20px] font-[600]'>Vuu Tri Tan</h3>
-            <p className='text-[13px]'>vuutritan2k2@gmail.com</p>
+            <h3 className='text-black text-[20px] font-[600]'>{userInfo ? (userInfo.fullName) : ("Guest")}</h3>
+            <p className='text-[13px]'>{userInfo ? (userInfo.phone) : ("")}</p>
 
         </div>
 

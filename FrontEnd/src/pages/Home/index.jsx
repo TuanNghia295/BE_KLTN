@@ -60,10 +60,10 @@ export default function Home() {
         <div className="container">
           <div className="flex items-center justify-between">
             <div className="leftSec w-[30%]">
-              <h2 className="text-[20px] font-[600]">Popular Products</h2>
+              <h2 className="text-[14px] xl:text-[20px] font-[600]">Popular Products</h2>
             </div>
 
-            <div className="rightSec">
+            {/* <div className="rightSec">
               <Tabs
                 value={value}
                 onChange={handleChange}
@@ -76,7 +76,7 @@ export default function Home() {
                 <Tab label="Footwear" />
                 <Tab label="Jewellery" />
               </Tabs>
-            </div>
+            </div> */}
           </div>
               <ProductsSlider listProducts={listProducts} />
         </div>
@@ -114,7 +114,7 @@ export default function Home() {
           <Link>
             <img src={Banner2} alt="running woman"></img>
           </Link>
-          <div className="flex flex-col justify-center items-center mt-4">
+          <div className="flex flex-col justify-center text-center items-center mt-4">
             <h3 className="font-bold text-[16px]">Women’s Air Jordan 4RM</h3>
             <h3 className="text-black text-[48px] font-[800] uppercase">Ride Easy</h3>
             <p className="mb-2">This new take on a classic comes in a comfortable low profile with iconic style.</p>

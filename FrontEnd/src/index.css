@@ -85,3 +85,7 @@ nav ul button:hover {
 .myAccountTabs li a.active::before {
     opacity: 100;
 }
+
+.Toastify__toast {
+    font-size: 14px !important;
+}

@@ -13,6 +13,9 @@ import { login } from '../../apis/authServices';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useStoreProvider } from '../../contexts/StoreProvider'
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Login = () => {
     const navigate = useNavigate();
@@ -25,15 +28,34 @@ const Login = () => {
     // Sử dụng mutation từ React Query
     const loginMutation = useMutation({
         mutationFn: login,
+        onMutate: () => setLoading(true), 
         onSuccess: (data) => {
-        alert("Đăng nhập thành công!");
+            toast.success("Đăng nhập thành công", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+            });
         getInfo(data);
         navigate('/'); // Chuyển hướng sau khi đăng nhập
         },
         onError: (error) => {
-        alert(error.response?.data?.message || "Đăng nhập thất bại!");
-        }
+            toast.error(error.response?.data?.message || "❌ Đăng nhập thất bại!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+            });
+        },
+        onSettled: () => setLoading(false)
     });
+    const [loading, setLoading] = useState(false);
 
     const onFinish = (e) => {
         e.preventDefault();
@@ -81,7 +103,7 @@ const Login = () => {
                         </div>
                         
                         <div className='flex items-center mt-5'>
-                                <Button className='btn-Login w-full' type="submit">{loginMutation.isLoading ? "Loading..." : "Login"}</Button>
+                                <Button className={`btn-Login w-full ${loading ? "!bg-black !text-[#fff]" : ""}`} type="submit">{loading ? "Loading..." : "Login"}</Button>
                         </div>
                             
                         <div className='flex w-full items-center mt-5'>

@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 
 const ProductsSlider = ({listProducts}) => {
 
-  const getColumns = () => (window.innerWidth < 768 ? 2 : 4);
+  const getColumns = () => (window.innerWidth < 768 ? 1 : 4);
   
   const [columns, setColumns] = useState(getColumns());
 

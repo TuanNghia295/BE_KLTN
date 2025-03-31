@@ -8,14 +8,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Favorite from '@mui/icons-material/Favorite';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Navigation from './Navigation';
-import { IoMdMenu } from 'react-icons/io';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { MyContext } from '../../App';
 import { useStoreProvider } from '../../contexts/StoreProvider'
 import { Button } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 //Call API
-import { useNavigate } from 'react-router-dom';
 import { logout } from '../../apis/authServices'
+
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -42,6 +42,10 @@ export default function Header() {
     await logout();
     clearInfo();
   }
+
+  const [openMobileMenu, setOpenMobileMenu] = useState(false)
+
+  const toogleMobileMenu = () => setOpenMobileMenu(!openMobileMenu)
   
   return (
     <header className="bg-white">
@@ -76,28 +80,37 @@ export default function Header() {
       <div className="header py-3 border-b-[1px] border-b-[1px] border-gray-250">
         <div className="container flex items-center justify-between">
           {/* logo */}
-          <div className="col1 w-[25%] flex justify-center items-center">
+          <div className="col1 w-[80px] xl:w-[30%] items-center">
             <Link to={'/'} className="w-full">
-              <img src={logoWhiteTheme} alt="Logo" className="w-1/2 md:w-1/3 lg:w-1/4 object-contain" />
+              <img src={logoWhiteTheme} alt="Logo" className="xl:w-1/3 object-contain" />
             </Link>
           </div>
 
           {/* Thanh Search */}
-          <div className="col2 w-[45%]">
+          <div className="col2 md:w-full w-[45%]">
             <Search />
           </div>
 
-          <div className="col3 w-[30%] flex items-center pl-7">
+          <div className="col3 w-full md:w-[30%] flex items-center pl-7">
             <ul className="flex items-center justify-end gap-3 w-full">
               {/* Đăng nhập */}
+              <li className="list-none block cursor-pointer">
               { userInfo ? (
                 <>
-                <p>Hi, {userInfo.fullName}</p>
-                <Button onClick={handleLogout}>Logout</Button>
+                <div className='flex items-center text-[12px] gap-2' onClick={toogleMobileMenu}>
+                  <div className='part1'>
+                    <Avatar alt={userInfo.fullName} src="/static/images/avatar/1.jpg" />
+                  </div>
+                  <div className='part2 hidden xl:block'>
+                    <p>{userInfo.fullName}</p>
+                    <p className='text-[8px]'>{userInfo.phone}</p>
+                  </div>
+                  {/* <Button onClick={handleLogout}>Logout</Button> */}
+                </div>
                 </>
               ) : (
                 <>
-                  <li className="list-none hidden xl:block">
+                  <div className='text-[10px'>
                     <Link to={'/login'} className="link transition text-[14px] font-[500]">
                       Sign In
                     </Link>
@@ -105,19 +118,19 @@ export default function Header() {
                     <Link to={'/register'} className="link transition text-[14px] font-[500]">
                       Sign Up
                     </Link>
-                  </li>
+                  </div>
                 </>
                 ) }
-              {/*Menu Responsive*/}
-              <li className="xl:hidden">
-                <StyledEngineProvider injectFirst>
-                  <CustomTooltip title="Menu">
-                    <IconButton aria-label="cart">
-                      <IoMdMenu style={{ color: '#000' }} />
-                    </IconButton>
-                  </CustomTooltip>
-                </StyledEngineProvider>
+                {/* Sub Menu */}
+                <ul className={`mt-2 shadow-xl bg-[#fff] p-4 rounded-md absolute z-50 text-[14px] flex flex-col text-center gap-3
+                  ${openMobileMenu ? "opacity-100" : "opacity-0"}
+                  `} onClick={() => setOpenMobileMenu(false)}>
+                  <li><Link to="/my-account">My Account</Link></li>
+                  <li onClick={handleLogout}>Log Out</li>
+                </ul>             
               </li>
+
+
               {/* Giỏ hàng */}
               <li>
                 <StyledEngineProvider injectFirst>

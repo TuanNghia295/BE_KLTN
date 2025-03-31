@@ -14,8 +14,8 @@ const Navigation = () => {
   return (
     <>
       <nav>
-        <div className="container hidden xl:flex items-center justify-start gap-8">
-          <div className="col_1 w-[16%]">
+        <div className="container flex items-center justify-center gap-8">
+          <div className="col_1 hidden xl:block xl:w-[16%]">
             <Button
               className="!text-white gap-2 !bg-black w-full cursor-pointer hover:!bg-gray1"
               onClick={toogleCategory}
@@ -124,7 +124,7 @@ const Navigation = () => {
             </ul>
           </div>
 
-          <div className="col_3 w-[15%] flex items-center justify-end gap-2 ">
+          <div className="col_3 hidden xl:block xl:w-[15%] flex items-center justify-end gap-2 ">
             <Button color="error" variant="text">
               <MdDiscount />
               &nbsp;
