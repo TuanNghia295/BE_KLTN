@@ -8,10 +8,37 @@ import { Link, Links } from 'react-router-dom';
 import '../Login/style.css'
 import Banner1  from '../../assets/log-reg/1.jpg'
 import { SiNike } from "react-icons/si";
+import { login } from '../../apis/authServices';
+
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { useStoreProvider } from '../../contexts/StoreProvider'
 
 const Login = () => {
-
+    const navigate = useNavigate();
     const [isShowPassword,setIsShowPassword] = useState(true);
+
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+
+    // Sử dụng mutation từ React Query
+    const loginMutation = useMutation({
+        mutationFn: login,
+        onSuccess: (data) => {
+        console.log(data)
+        alert("Đăng nhập thành công!");
+        navigate('/'); // Chuyển hướng sau khi đăng nhập
+        },
+        onError: (error) => {
+        alert(error.response?.data?.message || "Đăng nhập thất bại!");
+        }
+    });
+
+    const onFinish = (e) => {
+        e.preventDefault();
+        loginMutation.mutate({ phone, password });
+    };
+
 
   return (
     <section className='section py-10 xl:py-0'>
@@ -31,9 +58,9 @@ const Login = () => {
                         <Link to="/" className='block xl:hidden text-[30px]'><SiNike/></Link>
                         <h3 className='text-center text-[30px] font-bold text-black'>SIGN IN</h3>
                     </div>
-                    <form className='w-full mt-5'>
+                    <form className='w-full mt-5' onSubmit={onFinish}>
                         <div className='form-group w-full mb-5'>
-                            <TextField type="email" className='w-full' id="email" label="Email" variant="outlined" />
+                            <TextField type="phone" className='w-full' name="phone" label="Phone" variant="outlined" onChange={(e) => setPhone(e.target.value)} />
                         </div>
 
                         <div className='form-group w-full relative'>
@@ -41,6 +68,7 @@ const Login = () => {
                                 type={
                                     isShowPassword === true ? 'password' : ''
                                 }
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                             <Button className='!absolute !text-black !text-[20px] top-[3px] right-[5px] z-50 !w-[50px] !h-[50px] !min-w-[35px]'
                                     onClick={()=>setIsShowPassword(!isShowPassword)}
@@ -50,9 +78,9 @@ const Login = () => {
                                 }
                             </Button>
                         </div>
-
+                        
                         <div className='flex items-center mt-5'>
-                                <Button className='btn-Login w-full'>Login</Button>
+                                <Button className='btn-Login w-full' type="submit">{loginMutation.isLoading ? "Loading..." : "Login"}</Button>
                         </div>
                             
                         <div className='flex w-full items-center mt-5'>

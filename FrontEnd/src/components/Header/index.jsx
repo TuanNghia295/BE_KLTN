@@ -11,6 +11,7 @@ import Navigation from './Navigation';
 import { IoMdMenu } from 'react-icons/io';
 import { useContext } from 'react';
 import { MyContext } from '../../App';
+import { useStoreProvider } from '../../contexts/StoreProvider'
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -30,7 +31,9 @@ const CustomTooltip = styled(({ className, ...props }) => <Tooltip {...props} cl
 
 export default function Header() {
   const context = useContext(MyContext);
-
+  const { userInfo } = useStoreProvider()
+  console.log(userInfo)
+  
   return (
     <header className="bg-white">
       {/* Phần trên của header chính. Tạm gọi là affix header */}

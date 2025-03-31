@@ -10,14 +10,14 @@ export default function Search() {
   return (
     <>
       {/* Nút tìm kiếm hiển thị trên desktop */}
-      <div className="searchBox w-[100%] h-[50px] bg-inherit xl:bg-black rounded-[32px] relative p-2 px-4 hidden xl:flex">
+      <div className="searchBox w-[100%] h-[50px] bg-inherit xl:bg-[#f1f1f1] rounded-[32px] relative p-2 px-4 hidden xl:flex">
         <input
           type="text"
           placeholder="Search"
           className="w-full h-[36px] focus:outline-none bg-none bg-inherit p-2 text-[15px]"
         />
         <Button className="xl:flex xl:justify-center xl:!absolute xl:top-[8px] xl:right-[4px] z-10 xl:!w-[42px] xl:!min-w-[36px] xl:h-[36px] p-0 xl:!rounded-full xl:!text-[#f5f5f5]">
-          <IoIosSearch color="#fff" className="text-red-700 text-[20px]" />
+          <IoIosSearch color="#000" className="text-red-700 text-[20px]" />
         </Button>
       </div>
 
