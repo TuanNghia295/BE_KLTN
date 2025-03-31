@@ -14,7 +14,12 @@ import authAdminMiddleware from '../middleware/authAdminMiddleware.js';
 const productRouter = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-productRouter.post('/create', authAdminMiddleware, upload.single('imageUrl'), createProduct);
+productRouter.post(
+  '/create',
+  authAdminMiddleware,
+  upload.array('images', 5), // Giới hạn tối đa 5 ảnh
+  createProduct
+);
 productRouter.get('/getAllProducts', getAllProducts);
 productRouter.get('/getAllProducts/:categoryId', getAllProductsByCategoryId);
 productRouter.get('/getProductsCount', getAllProductsCount);

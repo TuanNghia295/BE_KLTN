@@ -11,49 +11,65 @@ const upload = multer({ storage });
 
 // Tạo sản phẩm
 export const createProduct = async (request, response) => {
-  const { name, price, description, categoryId, variations } = request.body;
+  try {
+    const { name, price, description, categoryId, variations } = request.body;
+    const imageFiles = request.files;
 
-  // Lấy file từ request
-  const imageFile = request.file; // Lấy file từ multer
-
-  if (!imageFile) {
-    return response.status(400).json({ message: 'Image is required' });
-  }
-
-  // Upload lên Cloudinary
-  const result = await cloudinary.uploader.upload_stream(
-    {
-      folder: 'products',
-      allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'], // Cho phép WebP
-      format: 'webp', // Ép kiểu thành WebP
-      transformation: [
-        { quality: 'auto', fetch_format: 'webp' }, // Chuyển về WebP tự động
-        { width: 500, height: 500, crop: 'fill', gravity: 'auto' }, // Resize ảnh
-      ],
-    },
-    (error, result) => {
-      if (error) {
-        return response.status(500).json({ message: 'Upload failed', error });
-      }
-
-      // Tiếp tục xử lý tạo sản phẩm sau khi upload thành công
-      const newProduct = new ProductModel({
-        name,
-        price,
-        description,
-        imageUrl: result.secure_url, // Lưu URL ảnh
-        categoryId: new mongoose.Types.ObjectId(categoryId),
-        variations: typeof variations === 'string' ? JSON.parse(variations) : variations,
-      });
-
-      newProduct
-        .save()
-        .then((product) => response.status(201).json(product))
-        .catch((err) => response.status(500).json({ message: 'Cannot create product', error: err.message }));
+    if (!imageFiles || imageFiles.length === 0) {
+      return response.status(400).json({ message: 'Vui lòng tải lên ít nhất một ảnh' });
     }
-  );
 
-  result.end(imageFile.buffer); // Kết thúc quá trình upload
+    // Hàm upload nhiều ảnh với metadata
+    const uploadImages = async (files) => {
+      const uploadPromises = files.map((file, index) => {
+        return new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'products',
+              allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
+              format: 'webp',
+              transformation: [
+                { quality: 'auto', fetch_format: 'webp' },
+                { width: 500, height: 500, crop: 'fill', gravity: 'auto' },
+              ],
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else
+                resolve({
+                  url: result.secure_url,
+                  publicId: result.public_id,
+                  isPrimary: index === 0, // Mặc định ảnh đầu tiên là ảnh chính
+                  order: index,
+                });
+            }
+          );
+          uploadStream.end(file.buffer);
+        });
+      });
+      return Promise.all(uploadPromises);
+    };
+
+    const uploadedImages = await uploadImages(imageFiles);
+
+    const newProduct = new ProductModel({
+      name,
+      price,
+      description,
+      images: uploadedImages,
+      categoryId: new mongoose.Types.ObjectId(categoryId),
+      variations: typeof variations === 'string' ? JSON.parse(variations) : variations,
+    });
+
+    const savedProduct = await newProduct.save();
+    response.status(201).json(savedProduct);
+  } catch (error) {
+    console.error('Lỗi khi tạo sản phẩm:', error);
+    response.status(500).json({
+      message: 'Lỗi server',
+      error: error.message,
+    });
+  }
 };
 
 // Lấy toàn bộ sản phẩm

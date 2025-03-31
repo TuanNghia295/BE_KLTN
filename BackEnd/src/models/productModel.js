@@ -14,7 +14,14 @@ const productSchema = new mongoose.Schema(
       ref: 'Category',
       required: false,
     },
-    imageUrl: { type: String, required: true },
+    images: [
+      {
+        url: { type: String, required: true },
+        isPrimary: { type: Boolean, default: false }, // Ảnh chính
+        order: Number, // Thứ tự hiển thị
+        publicId: { type: String }, // Lưu publicId từ Cloudinary để quản lý
+      },
+    ],
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 
