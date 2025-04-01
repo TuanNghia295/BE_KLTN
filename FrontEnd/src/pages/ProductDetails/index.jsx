@@ -81,7 +81,7 @@ const ProductDetails = () => {
               <Button className="!bg-black !w-full !text-white !mt-3">Buy Now</Button>
 
               <p className="mt-4">
-                {detailProduct.description}
+                {item.description}
               </p>
             </div>
           </div>

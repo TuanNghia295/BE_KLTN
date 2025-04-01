@@ -123,7 +123,7 @@ export default function Header() {
                 ) }
                 {/* Sub Menu */}
                 <ul className={`mt-2 shadow-xl bg-[#fff] p-4 rounded-md absolute z-50 text-[14px] flex flex-col text-center gap-3
-                  ${openMobileMenu ? "opacity-100" : "opacity-0"}
+                  ${!openMobileMenu ? "hidden" : "block"}
                   `} onClick={() => setOpenMobileMenu(false)}>
                   <li><Link to="/my-account">My Account</Link></li>
                   <li onClick={handleLogout}>Log Out</li>
