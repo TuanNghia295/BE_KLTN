@@ -30,16 +30,16 @@ const Login = () => {
         mutationFn: login,
         onMutate: () => setLoading(true), 
         onSuccess: (data) => {
-            toast.success("Đăng nhập thành công", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "colored",
-            });
         getInfo(data);
+        toast.success("Đăng nhập thành công", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+        });
         navigate('/'); // Chuyển hướng sau khi đăng nhập
         },
         onError: (error) => {

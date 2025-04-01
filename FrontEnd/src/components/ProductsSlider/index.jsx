@@ -36,7 +36,7 @@ const ProductsSlider = ({listProducts}) => {
           ) : (
           listProducts.map((product) => (
             <SwiperSlide>
-              <ProductItem key={product._id} product={product} />
+              <ProductItem key={product._id} product={product} customHeight="300px" />
             </SwiperSlide>
           ))
         )}          

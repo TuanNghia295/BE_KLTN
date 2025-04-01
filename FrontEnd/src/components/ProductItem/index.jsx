@@ -6,12 +6,12 @@ import { IoGitCompareOutline } from 'react-icons/io5';
 import { MdZoomOutMap } from 'react-icons/md';
 import Tooltip from '@mui/material/Tooltip';
 
-const ProductItem = ({product}) => {
+const ProductItem = ({product, customHeight}) => {
   return (
     <div className="productItem rounded-md w-[100%] overflow-hidden bg-white text-black shadow-lg relative">
       <div className="group imgWrapper overflow-hidden rounded-none relative">
         <Link to={`/product/${product.name}`}>
-          <div className="img h-[150px] md:h-[250px] overflow-hidden">
+          <div className="img h-[150px] md:h-[250px] overflow-hidden" style={{height: customHeight}}>
             {/* <img
               src={product.imageUrl}
               className="w-full h-full object-cover"

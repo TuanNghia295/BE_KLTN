@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import '../Home/style.css'
 // Call API GET PRODUCTS
 import { getAllProducts } from '../../apis/productsService';
+import TabsHomePage from '../../components/TabsHomePage';
 
 export default function Home() {
   const [listProducts, setListProducts] = useState([])
@@ -69,12 +70,12 @@ export default function Home() {
 
       <section className="bg-white py-8">
         <div className="container">
-          <div className="flex items-center justify-between">
-            <div className="leftSec w-[50%]">
+          <div className="flex items-center justify-around">
+            <div className="leftSec w-[60%]">
               <h2 className="text-[20px] font-[600]">Popular Products</h2>
             </div>
 
-            <div className='rightSec w-[40%] overflow-x-scroll no-scrollbar flex'>
+            {/* <div className='rightSec w-[40%] overflow-x-scroll no-scrollbar flex'>
               <span>Fashion</span>
               <span>Fashion</span>
               <span>Fashion</span>
@@ -84,8 +85,10 @@ export default function Home() {
               <span>Fashion</span>
               <span>Fashion</span>
               <span>Fashion</span>
+            </div> */}
+            <div className='rightSec !ml-auto'>
+              <TabsHomePage/>
             </div>
-
             {/* <div className="rightSec">
               <Tabs
                 value={value}

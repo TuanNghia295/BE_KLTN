@@ -15,11 +15,11 @@ const Orders = () => {
                 <div className='card bg-white p-5 rounded-md'>
                     <h1 className='text-[22px] text-black font-[600]'>MY ORDERS</h1>
                     <p>Total: 1 orders</p>
-
+                    <div className='w-full overflow-x-auto'>
                     <table class="border border-gray-300 divide-y divide-gray-200 mt-3">
                         <thead class="bg-gray-100">
                             <tr>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Details</th>
+                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Detail</th>
                             <th class="px-4 py-2 text-left text-gray-600 font-medium">Order ID</th>
                             <th class="px-4 py-2 text-left text-gray-600 font-medium">Payment ID</th>
                             <th class="px-4 py-2 text-left text-gray-600 font-medium">Time</th>
@@ -42,8 +42,8 @@ const Orders = () => {
                             </tr>
                         </tbody>
                         
-                        </table>
-
+                    </table>
+                    </div>
                 </div>
             </div>
         </div>

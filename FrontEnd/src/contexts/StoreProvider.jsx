@@ -14,15 +14,16 @@ export const StoreProvider = ({ children }) => {
         setUserInfo(null)
     }
 
-    const token = localStorage.getItem('accesstoken')
+    const accesstoken = localStorage.getItem('accesstoken')
+    console.log(accesstoken)
 
     useEffect(() => {
-        if(token) {
-            getUserInfo(token).then((response) => {
+        if(accesstoken) {
+            getUserInfo(accesstoken).then((response) => {
                 setUserInfo(response)
              })
         }
-    }, [])
+    }, [accesstoken])
 
     return (
         <StoreContext.Provider value={{userInfo, getInfo, clearInfo}}>
