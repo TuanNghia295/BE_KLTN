@@ -96,10 +96,10 @@ const CartPanel = () => {
 
                 <div className='flex flex-col w-full justify-center mt-4'>
                   <Link to="/checkout">
-                  <Button className='w-full !bg-black !rounded-none !text-white !py-3'>Checkout</Button>
+                  <Button className='w-full !bg-black !rounded-none !text-white !py-3' onClick={()=>context.setOpenCartPanel(false)}>Checkout</Button>
                   </Link>
                   <Link to="/cart">
-                  <Button className='w-full !text-gray-600 !bg-[#f1f1f1] !rounded-none !mt-2 !py-3 hover:!bg-black hover:!text-white'>View Cart</Button>
+                  <Button className='w-full !text-gray-600 !bg-[#f1f1f1] !rounded-none !mt-2 !py-3 hover:!bg-black hover:!text-white' onClick={()=>context.setOpenCartPanel(false)}>View Cart</Button>
                   </Link>
                 </div>
             </div>

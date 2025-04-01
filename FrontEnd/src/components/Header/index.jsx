@@ -13,6 +13,7 @@ import { MyContext } from '../../App';
 import { useStoreProvider } from '../../contexts/StoreProvider'
 import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import '../Header/style.css'
 //Call API
 import { logout } from '../../apis/authServices'
 
@@ -94,39 +95,41 @@ export default function Header() {
           <div className="col3 w-full xl:w-[30%] flex items-center pl-7">
             <ul className="flex items-center justify-end gap-3 w-full">
               {/* Đăng nhập */}
-              <li className="list-none block cursor-pointer">
+              <li className="list-none block">
               { userInfo ? (
                 <>
-                <div className='flex items-center text-[12px] gap-2' onClick={toogleMobileMenu}>
-                  <div className='part1'>
+                <div className='flex items-center text-[16px] gap-2' onClick={toogleMobileMenu}>
                     <Avatar alt={userInfo.fullName} src="/static/images/avatar/1.jpg" />
-                  </div>
-                  <div className='part2 hidden xl:block'>
-                    <p>{userInfo.fullName}</p>
-                    <p className='text-[8px]'>{userInfo.phone}</p>
-                  </div>
-                  {/* <Button onClick={handleLogout}>Logout</Button> */}
                 </div>
                 </>
               ) : (
                 <>
-                  <div className='text-[10px'>
-                    <Link to={'/login'} className="link transition text-[14px] font-[500]">
+                  <div className=''>
+                    <Link to={'/login'} className="link transition text-[16px] font-[500]">
                       Sign In
-                    </Link>
-                    &nbsp; | &nbsp;
-                    <Link to={'/register'} className="link transition text-[14px] font-[500]">
-                      Sign Up
                     </Link>
                   </div>
                 </>
                 ) }
                 {/* Sub Menu */}
-                <ul className={`mt-2 shadow-xl bg-[#fff] p-4 rounded-md absolute z-50 text-[14px] flex flex-col text-center gap-3
+                <ul className={`submenuProfile mt-2 shadow-xl bg-[#fff] p-2 border border-[#00000094] rounded-xl absolute z-50 text-[14px] flex flex-col text-center gap-1
                   ${!openMobileMenu ? "hidden" : "block"}
                   `} onClick={() => setOpenMobileMenu(false)}>
-                  <li><Link to="/my-account">My Account</Link></li>
-                  <li onClick={handleLogout}>Log Out</li>
+                  <div className='infoUser flex flex-col border-b-2 border-[#f3f3f3]'>
+                  { userInfo ? (
+                    <>
+                    <p className='font-[600]'>{userInfo.fullName}</p>
+                    <p className='font-[300]'>{userInfo.phone}</p>
+                    </>
+                  ) :
+                  (
+                    <>
+                    <p className='font-[600]'>Guest</p>
+                    </>
+                  )}
+                  </div>
+                  <li className='hover:bg-[#f1f1f1] px-5 xl:px-10 py-2 rounded-md cursor-pointer'><Link to="/my-account">My Account</Link></li>
+                  <li className='hover:bg-[#f1f1f1] px-5 xl:px-10 py-2 rounded-md cursor-pointer' onClick={handleLogout}>Log Out</li>
                 </ul>             
               </li>
 

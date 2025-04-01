@@ -4,8 +4,21 @@ import { NavLink } from 'react-router-dom'
 import { Button } from '@mui/material'
 import { useStoreProvider } from '../../contexts/StoreProvider'
 import Avatar from '@mui/material/Avatar';
+
+import { CgProfile } from "react-icons/cg";
+import { FaMapLocationDot } from "react-icons/fa6";
+import { MdFavorite } from "react-icons/md";
+import { FaClipboardList } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
 const AccountSlidebar = () => {
     const { userInfo } = useStoreProvider()
+
+    const menuItems = [
+        { path: "/my-account", label: "My Profile", icon: <CgProfile />  },
+        { path: "/my-address", label: "My Address", icon: <FaMapLocationDot /> },
+        { path: "/my-list", label: "My List", icon: <MdFavorite /> },
+        { path: "/my-orders", label: "My Orders", icon: <FaClipboardList /> },
+    ];
 
   return (
     <div className='card bg-white shadow-md rounded-md p-5'>
@@ -24,7 +37,7 @@ const AccountSlidebar = () => {
 
         </div>
 
-        <ul className='list-none myAccountTabs flex flex-col gap-1'> 
+        {/* <ul className='list-none myAccountTabs flex flex-col gap-1'> 
             <li className='w-full'>
                 <NavLink to='/my-account' exact={true} activeClassname="isActive">
                 <Button className='w-full !text-black !bg-[#f1f1f1] !my-1 !rounded-none flex gap-2 items-center'>My Profile</Button>
@@ -51,6 +64,25 @@ const AccountSlidebar = () => {
 
             <li className='w-full'>
                 <Button className='w-full !text-black !bg-[#f1f1f1] !my-1 !rounded-none flex gap-2 items-center'>Logout</Button>
+            </li>
+        </ul> */}
+
+        <ul className="list-none myAccountTabs flex flex-row xl:flex-col gap-1">
+            {menuItems.map((item, index) => (
+                <li key={index} className="w-full">
+                    <NavLink to={item.path} exact={true} activeClassname="isActive">
+                        <Button className="w-full !text-black !bg-[#f1f1f1] !my-1 !rounded-none flex gap-2 items-center">
+                            <span className="block xl:hidden text-[20px] p-2">{item.icon}</span>
+                            <span className="hidden xl:block">{item.label}</span>
+                        </Button>
+                    </NavLink>
+                </li>
+            ))}
+            <li className="w-full">
+                <Button className="w-full !text-black !bg-[#f1f1f1] !my-1 !rounded-none flex gap-2 items-center">
+                    <span className="block xl:hidden text-[20px] p-2"><IoIosLogOut /></span>
+                    <span className="hidden xl:block">Logout</span>
+                </Button>
             </li>
         </ul>
     </div>

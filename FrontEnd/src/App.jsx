@@ -20,6 +20,7 @@ import MyAddress from './pages/MyAddress/index.jsx';
 
 import { ToastContainer } from "react-toastify";
 import { StoreProvider } from './contexts/StoreProvider.jsx'
+import OrderDetails from './pages/OrderDetails/index.jsx';
 
 export const MyContext = createContext();
 
@@ -64,6 +65,7 @@ export default function App() {
           <Route path={"/my-account"} exact={true} element={<MainLayout><MyAccount/></MainLayout>} />
           <Route path={"/my-list"} exact={true} element={<MainLayout><MyListPage/></MainLayout>} />
           <Route path={"/my-orders"} exact={true} element={<MainLayout><Orders/></MainLayout>} />
+          <Route path={"/my-orders/order/:id"} exact={true} element={<MainLayout><OrderDetails/></MainLayout>} />
           <Route path={"/my-address"} exact={true} element={<MainLayout><MyAddress/></MainLayout>} />
           <Route path="/listing" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
           <Route path="/listing/:category" exact={true} element={<MainLayout><ProductListing /></MainLayout>} />
@@ -71,7 +73,7 @@ export default function App() {
         </Routes>
         
         <Drawer open={openCartPanel} onClose={toggleCartPanel(false)} anchor={"right"} className='cartPanel'>
-        <CartPanel/>
+          <CartPanel/>
         </Drawer>
       </MyContext.Provider>
       </BrowserRouter>

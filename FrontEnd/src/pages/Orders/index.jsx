@@ -2,6 +2,7 @@ import React from 'react'
 import AccountSlidebar from '../../components/AccountSlidebar';
 import { FaAngleDown } from "react-icons/fa";
 import '../Orders/style.css'
+import TabListOrders from './TabListOrders';
 
 const Orders = () => {
   return (
@@ -13,37 +14,7 @@ const Orders = () => {
 
             <div className='col2 w-full xl:w-[80%]'>
                 <div className='card bg-white p-5 rounded-md'>
-                    <h1 className='text-[22px] text-black font-[600]'>MY ORDERS</h1>
-                    <p>Total: 1 orders</p>
-                    <div className='w-full overflow-x-auto'>
-                    <table class="border border-gray-300 divide-y divide-gray-200 mt-3">
-                        <thead class="bg-gray-100">
-                            <tr>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Detail</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Order ID</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Payment ID</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Time</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Full Name</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Phone Number</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Address</th>
-                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                            <td class="px-4 py-2"><FaAngleDown /></td>
-                            <td class="px-4 py-2">1</td>
-                            <td class="px-4 py-2">payment_asdasdasd</td>
-                            <td class="px-4 py-2">12:09 4/3/2025</td>
-                            <td class="px-4 py-2">Admin</td>
-                            <td class="px-4 py-2">0704539076</td>
-                            <td class="px-4 py-2">Yersin, District 1, HCM City</td>
-                            <td class="px-4 py-2">Pending</td>
-                            </tr>
-                        </tbody>
-                        
-                    </table>
-                    </div>
+                    <TabListOrders/>
                 </div>
             </div>
         </div>

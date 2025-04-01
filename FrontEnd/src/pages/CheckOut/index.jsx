@@ -18,19 +18,8 @@ const CheckOut = () => {
 
     const handleChange = (value) => {
       setSelected(value === selected ? null : value);
-      if (value === "vnpay") handleClickOpen();
     };
 
-    const [open, setOpen] = React.useState(false);
-    
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-      
-    const handleClose = () => {
-        setOpen(false);
-        setSelected("money")
-    };
     
   return (
     <>
@@ -155,30 +144,6 @@ const CheckOut = () => {
                 </div>
             </div>
         </section>
-
-                <Dialog
-                open={open}
-                onClose={handleClose}
-                slotProps={{
-                paper: {
-                    component: 'form',
-                    onSubmit: (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    const email = formJson.email;
-                    console.log(email);
-                    handleClose();
-                    },
-                },
-                }}
-                >
-                <DialogContent>
-                    <div className='flex flex-wrap gap-4 justify-center p-2'>
-                        <img src="https://kalite.vn/wp-content/uploads/2021/09/maqrkalite.jpg"/>
-                    </div>
-                </DialogContent>
-                </Dialog>
     </>
   )
 }

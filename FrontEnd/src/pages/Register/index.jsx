@@ -37,7 +37,7 @@ const Register = () => {
                         </div>
 
                         <div className='form-group w-full mb-5'>
-                            <TextField type="email" className='w-full' id="email" label="Email" variant="outlined" />
+                            <TextField type="text" className='w-full' id="phone" label="Phone" variant="outlined" />
                         </div>
 
                         <div className='form-group w-full relative mb-5'>
