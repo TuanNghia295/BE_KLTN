@@ -21,7 +21,7 @@ app.use(cookieParser()); // Để đọc cookies
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Chỉ cho phép frontend truy cập
+    origin: true, // Chỉ cho phép frontend truy cập
     credentials: true, // Cho phép gửi cookie
   })
 );

@@ -1,11 +1,12 @@
 import express from 'express';
-import { createBanner, deleteBanner, getBanners } from '../controllers/bannerController.js';
+import { createBanner, deleteBanner, getBannerAdmin, getBanners } from '../controllers/bannerController.js';
 import multer from 'multer';
 import authAdminMiddleware from '../middleware/authAdminMiddleware.js';
 
 const bannerRouter = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 bannerRouter.get('/getAll', getBanners);
+bannerRouter.get('/getAllByAdmin', authAdminMiddleware, getBannerAdmin);
 bannerRouter.post('/create', authAdminMiddleware, upload.single('url'), createBanner);
 bannerRouter.post('/delete:id', authAdminMiddleware, deleteBanner);
 

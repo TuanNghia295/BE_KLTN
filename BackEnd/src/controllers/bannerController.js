@@ -4,9 +4,19 @@ import multer from 'multer';
 import cloudinary from '../config/cloudinary.js';
 import { ROLE } from '../constant/role.js';
 
-// lấy danh sách banner phân trang và sắp xếp dựa theo order DESC hoặc ASC
-// /banners/getAll?page=2&limit=5&sort=createdAt&type=DESC
-const getBanners = (req, res) => {
+// Lấy danh sách banner và sắp xếp dựa theo order DESC hoặc ASC
+// /banners/getAll?sort=createdAt&type=DESC
+const getBanners = async (req, res) => {
+  BannerModel.find() // Tìm tất cả các banner trong cơ sở dữ liệu
+    .then((banners) =>
+      res.status(200).json({
+        data: banners, // Trả về danh sách các banner
+      })
+    ) // Trả về danh sách các banner dưới dạng JSON với mã trạng thái 200
+    .catch((err) => res.status(500).json({ message: 'Cannot get banners', error: err.message })); // Xử lý lỗi và trả về mã trạng thái 500
+};
+
+const getBannerAdmin = async (req, res) => {
   const { page, limit, sort, type } = req.query; // Lấy các tham số page, limit và sort từ query string của request
   const pageNumber = parseInt(page); // Chuyển đổi tham số page thành số nguyên
   const limitNumber = parseInt(limit); // Chuyển đổi tham số limit thành số nguyên
@@ -15,7 +25,7 @@ const getBanners = (req, res) => {
 
   const sortKey = Object.keys(sortObject)[0]; // Lấy key của object sort
   const sortValue = Object.values(sortObject)[0]; // Lấy value của object sort
-
+  const totalBanners = await BannerModel.countDocuments();
   BannerModel.find() // Tìm tất cả các banner trong cơ sở dữ liệu
     .sort({ [sortKey]: sortValue }) // Sắp xếp các banner theo key và value được cung cấp
     .skip((pageNumber - 1) * limitNumber) // Bỏ qua một số lượng banner nhất định để phân trang
@@ -26,7 +36,7 @@ const getBanners = (req, res) => {
         pagination: {
           page: pageNumber,
           limit: limitNumber,
-          // totalPage: Math.ceil(banners.length / limitNumber),
+          total: totalBanners,
         },
       })
     ) // Trả về danh sách các banner dưới dạng JSON với mã trạng thái 200
@@ -95,4 +105,4 @@ const deleteBanner = async (req, res) => {
     .catch((err) => res.status(500).json({ message: 'Cannot delete banner', error: err.message }));
 };
 
-export { getBanners, createBanner, deleteBanner };
+export { getBanners, getBannerAdmin, createBanner, deleteBanner };
