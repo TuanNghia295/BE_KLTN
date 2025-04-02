@@ -47,10 +47,6 @@ const getBannerAdmin = async (req, res) => {
 const createBanner = async (req, res) => {
   const { alt } = req.body;
 
-  //   Cấu hình bộ nhớ tạm cho multer
-  const storage = multer.memoryStorage();
-  multer({ storage });
-
   // Lấy file từ request
   const imageFile = req.file;
   console.log('imageFile', imageFile);
@@ -61,6 +57,10 @@ const createBanner = async (req, res) => {
       message: 'No image file found in request',
     });
   }
+
+  //   Cấu hình bộ nhớ tạm cho multer
+  const storage = multer.memoryStorage();
+  multer({ storage });
 
   //   Upload lên cloud dinary
   const result = await cloudinary.uploader.upload_stream(
@@ -95,14 +95,34 @@ const createBanner = async (req, res) => {
 const deleteBanner = async (req, res) => {
   const { id } = req.params;
 
-  BannerModel.findByIdAndDelete({ id })
-    .then((banner) => {
-      if (!banner) {
-        return res.status(404).json({ message: 'Banner not found' });
-      }
-      res.status(200).json({ message: 'Delete banner successfully' });
-    })
-    .catch((err) => res.status(500).json({ message: 'Cannot delete banner', error: err.message }));
+  try {
+    // Tìm banner trong database trước
+    const banner = await BannerModel.findById(id);
+
+    if (!banner) {
+      return res.status(404).json({ message: 'Banner not found' });
+    }
+
+    // Lấy public_id từ URL của Cloudinary
+    // URL Cloudinary thường có dạng: https://res.cloudinary.com/{cloud_name}/image/upload/v{version}/{public_id}.{format}
+    const urlParts = banner.url.split('/');
+    const fileName = urlParts[urlParts.length - 1]; // Lấy phần cuối của URL
+    const publicId = `banners/${fileName.split('.')[0]}`; // Tạo public_id (thêm folder 'banners')
+
+    // Xóa ảnh trên Cloudinary
+    await cloudinary.uploader.destroy(publicId);
+
+    // Sau khi xóa trên Cloudinary thành công, xóa trong database
+    await BannerModel.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'Delete banner successfully' });
+  } catch (err) {
+    console.error('Error deleting banner:', err);
+    res.status(500).json({
+      message: 'Cannot delete banner',
+      error: err.message,
+    });
+  }
 };
 
 export { getBanners, getBannerAdmin, createBanner, deleteBanner };

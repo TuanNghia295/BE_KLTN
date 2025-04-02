@@ -7,7 +7,7 @@ const bannerRouter = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 bannerRouter.get('/getAll', getBanners);
 bannerRouter.get('/getAllByAdmin', authAdminMiddleware, getBannerAdmin);
-bannerRouter.post('/create', authAdminMiddleware, upload.single('url'), createBanner);
-bannerRouter.post('/delete:id', authAdminMiddleware, deleteBanner);
+bannerRouter.post('/create', authAdminMiddleware, upload.single('image'), createBanner);
+bannerRouter.delete('/delete/:id', authAdminMiddleware, deleteBanner);
 
 export default bannerRouter;
