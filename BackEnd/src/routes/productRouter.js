@@ -23,7 +23,7 @@ productRouter.post(
 productRouter.get('/getAllProducts', getAllProducts);
 productRouter.get('/getAllProducts/:categoryId', getAllProductsByCategoryId);
 productRouter.get('/getProductsCount', getAllProductsCount);
-productRouter.get('/getSingleProduct', getSingleProduct);
+productRouter.get('/:id', getSingleProduct);
 productRouter.delete('/:id', authAdminMiddleware, deleteProduct);
 productRouter.put('/update/:id', authAdminMiddleware, updateProduct);
 

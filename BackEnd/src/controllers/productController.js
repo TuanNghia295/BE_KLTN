@@ -157,16 +157,30 @@ export const getAllProductsCount = async (request, response) => {
 
 // Get Single Product
 export const getSingleProduct = async (request, response) => {
+  // Lấy ID sản phẩm từ request params
+  const productId = request.params.id;
   try {
-    const singleProduct = await ProductModel.find({
-      name: request.query.name,
-    });
+    // Tìm sản phẩm trong cơ sở dữ liệu
+    const product = await ProductModel.findById(productId).populate('categoryId');
 
-    response.status(200).json({
-      singleProduct,
+    // Nếu không tìm thấy sản phẩm, trả về lỗi 404
+    if (!product) {
+      return response.status(404).json({
+        message: 'Product not found',
+      });
+    }
+
+    // Trả về thông tin sản phẩm
+    return response.status(200).json({
+      data: product,
+      message: 'Get product successfully',
     });
   } catch (error) {
-    response.status(500).json({ message: error.message });
+    console.error('Error fetching product:', error);
+    return response.status(500).json({
+      message: 'Error fetching product',
+      error: error.message,
+    });
   }
 };
 
