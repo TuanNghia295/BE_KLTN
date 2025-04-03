@@ -1,9 +1,0 @@
-.submenuProfile::before {
-    content: "";
-    position: absolute;
-    top: -8px;
-    left: 12px;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 8px solid #00000094;
-  }
