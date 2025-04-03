@@ -77,8 +77,7 @@ export const getAllProducts = async (request, response) => {
   try {
     const page = parseInt(request.query.page) || 1;
     const perPage = parseInt(request.query.perPage);
-    const totalPosts = await ProductModel.countDocuments();
-    const totalPages = Math.ceil(totalPosts / perPage);
+    const totalPages = await ProductModel.countDocuments();
 
     if (page > perPage) {
       return response.status(404).json({
@@ -102,7 +101,7 @@ export const getAllProducts = async (request, response) => {
     }
 
     response.status(200).json({
-      products: products,
+      data: products,
       totalPage: totalPages,
       page: page,
     });
@@ -173,17 +172,41 @@ export const getSingleProduct = async (request, response) => {
 
 // Delete Product
 export const deleteProduct = async (request, response) => {
-  const product = await ProductModel.findByIdAndDelete(request.params.id).populate('categoryId');
+  try {
+    // Tìm sản phẩm cần xóa
+    const product = await ProductModel.findById(request.params.id).populate('categoryId');
 
-  if (!product) {
+    if (!product) {
+      return response.status(404).json({
+        message: 'Product not found',
+      });
+    }
+
+    // Xóa các hình ảnh liên quan trên Cloudinary
+    const deleteImages = async (images) => {
+      const deletePromises = images.map(
+        (image) => cloudinary.uploader.destroy(image.publicId) // Xóa hình ảnh bằng `publicId`
+      );
+      return Promise.all(deletePromises);
+    };
+
+    if (product.images && product.images.length > 0) {
+      await deleteImages(product.images);
+    }
+
+    // Xóa sản phẩm khỏi cơ sở dữ liệu
+    await ProductModel.findByIdAndDelete(request.params.id);
+
+    return response.status(200).json({
+      message: 'Delete product and associated images successfully',
+    });
+  } catch (error) {
+    console.error('Error deleting product:', error);
     return response.status(500).json({
-      message: 'Product not found',
+      message: 'Error deleting product',
+      error: error.message,
     });
   }
-
-  return response.status(200).json({
-    message: 'Delete product successfully',
-  });
 };
 
 // Update Product
