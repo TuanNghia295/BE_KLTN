@@ -91,12 +91,15 @@ export const login = async (req, res) => {
 
   // Trả về thông tin user và token
   res.status(200).json({
-    fullName: userExist.fullName,
-    phone: userExist.phone,
-    email: userExist.email,
-    role: userExist.role,
-    address: userExist.address,
-    accessToken,
+    statusCode: 200,
+    data: {
+      fullName: userExist.fullName,
+      phone: userExist.phone,
+      email: userExist.email,
+      role: userExist.role,
+      address: userExist.address,
+      accessToken,
+    },
   });
 };
 

@@ -47,7 +47,10 @@ export const getListUser = async (req, res) => {
 // Lấy thông tin người dùng hiện tại
 export const getUserInfo = async (req, res) => {
   const user = await UserModel.findById(req.user._id).select('-password'); // Lấy thông tin người dùng hiện tại, không lấy password
-  res.json(user);
+  res.json({
+    statusCode: 200,
+    data: user,
+  });
 };
 
 // Sửa thông tin người dùng hiện tại
@@ -75,7 +78,10 @@ export const updateUser = async (req, res) => {
 
     // Trả về thông tin người dùng đã cập nhật, không bao gồm mật khẩu
     const updatedUser = await UserModel.findById(req.user._id).select('-password');
-    res.json(updatedUser);
+    res.json({
+      statusCode: 200,
+      data: updatedUser,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error updating user', error: error.message });
   }
@@ -123,7 +129,10 @@ export const updateUserById = async (req, res) => {
 
     // Trả về thông tin người dùng đã cập nhật, không bao gồm mật khẩu
     const updatedUser = await UserModel.findById(id).select('-password');
-    res.json(updatedUser);
+    res.json({
+      statusCode: 200,
+      data: updatedUser,
+    });
   } catch (error) {
     res.status(500).json({ errorCode: error.code, message: 'Error updating user', error: error.message });
   }
