@@ -93,6 +93,7 @@ export const login = async (req, res) => {
   res.status(200).json({
     statusCode: 200,
     data: {
+      _id: userExist._id,
       fullName: userExist.fullName,
       phone: userExist.phone,
       email: userExist.email,
