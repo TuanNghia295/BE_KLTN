@@ -89,10 +89,11 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// PUT /cart/update/:userId?productId=...&size=...&color=...&quantity=...
 export const updateCart = async (req, res) => {
   const { productId, size, color, quantity } = req.query;
   const userId = req.params.userId;
+
+  console.log('updateCart', req.query);
 
   // Kiểm tra tính hợp lệ của userId
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -123,18 +124,49 @@ export const updateCart = async (req, res) => {
       return res.status(404).json({ message: 'Product variation not found' });
     }
 
-    // Nếu biến thể sản phẩm đã có trong giỏ hàng, cập nhật số lượng
-    const itemIndex = cart.items.findIndex(
-      (item) => item.productId === parseInt(productId) && item.size === size && item.color === color
-    );
+    // Nếu biến thể sản phẩm đã có trong giỏ hàng
+    const itemIndex = cart.items.findIndex((item) => item.productId === parseInt(productId) && item.color === color);
 
     if (itemIndex > -1) {
-      cart.items[itemIndex].quantity = parseInt(quantity);
-      await cart.save();
-      return res.status(200).json(cart);
+      const existingItem = cart.items[itemIndex];
+
+      if (parseInt(quantity) === 0) {
+        // Nếu quantity bằng 0, xóa sản phẩm khỏi giỏ hàng
+        cart.items.splice(itemIndex, 1);
+      } else if (existingItem.size === size) {
+        // Nếu cùng size nhưng khác số lượng, cập nhật số lượng từ query
+        existingItem.quantity = parseInt(quantity);
+      } else {
+        // Nếu khác size, tách biến thể thành một biến thể mới
+        cart.items.push({
+          productId: parseInt(productId),
+          size,
+          color,
+          quantity: 1, // Số lượng bắt đầu là 1
+        });
+
+        // Giảm số lượng của biến thể trước đó
+        existingItem.quantity -= 1;
+
+        // Nếu số lượng của biến thể trước đó giảm xuống 0, xóa biến thể đó
+        if (existingItem.quantity <= 0) {
+          cart.items.splice(itemIndex, 1);
+        }
+      }
     } else {
-      return res.status(404).json({ message: 'Product variation not found in cart' });
+      // Nếu biến thể sản phẩm chưa có trong giỏ hàng, thêm mới
+      cart.items.push({
+        productId: parseInt(productId),
+        size,
+        color,
+        quantity: parseInt(quantity),
+      });
     }
+
+    await cart.save();
+    console.log('Updated cart:', cart);
+
+    return res.status(200).json(cart);
   } catch (error) {
     res.status(500).json({ message: 'Cannot update cart', error: error.message });
   }
