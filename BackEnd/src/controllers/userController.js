@@ -71,7 +71,13 @@ export const updateUser = async (req, res) => {
     if (password) user.password = await bcrypt.hash(password, 10); // Mã hóa mật khẩu mới
     if (email) user.email = email;
     if (phone) user.phone = phone;
-    if (address) user.address = address;
+    if (address) {
+      if (Array.isArray(address)) {
+        user.address = address; // Ghi đè toàn bộ địa chỉ nếu là mảng
+      } else {
+        user.address.push(address); // Thêm địa chỉ mới nếu là chuỗi
+      }
+    }
 
     // Lưu thông tin người dùng đã cập nhật
     await user.save();
@@ -135,5 +141,21 @@ export const updateUserById = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ errorCode: error.code, message: 'Error updating user', error: error.message });
+  }
+};
+
+// Lấy danh sách địa chỉ của người dùng hiện tại
+export const getUserAddresses = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user._id).select('address'); // Chỉ lấy trường address
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({
+      statusCode: 200,
+      data: user.address,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching addresses', error: error.message });
   }
 };

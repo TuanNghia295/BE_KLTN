@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     phone: { type: String, unique: true, required: true },
     role: { type: String, enum: [ROLE.ADMIN, ROLE.USER], required: true },
-    address: { type: String, default: null, require: true },
+    address: { type: [String], default: [] },
     refreshToken: { type: String, default: null },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
