@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import UserModel from '../models/userModel.js';
 import { validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 
 // Tạo user [POST] /api/register
 export const createUser = async (req, res, next) => {
@@ -126,28 +127,42 @@ export const loginAdmin = async (req, res) => {
 export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) {
-      return res.status(401).json({ message: 'Không có refresh token' });
+
+    // Validate refreshToken
+    if (!refreshToken || typeof refreshToken !== 'string') {
+      console.error('Invalid refresh token:', refreshToken);
+      return res.status(400).json({ message: 'Invalid refresh token' });
     }
 
-    const user = await UserModel.findOne({ refreshToken });
-    if (!user) {
-      return res.status(403).json({ message: 'Refresh token không hợp lệ' });
-    }
-
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+    // Verify the refresh token
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
       if (err) {
+        console.error('JWT Verification Error:', err);
         return res.status(403).json({ message: 'Refresh token không hợp lệ' });
       }
 
-      const newAccessToken = generateAccessToken(user._id);
-      res.json({ accessToken: newAccessToken });
+      console.log('Decoded Token:', decoded);
+
+      // Find the user associated with the refresh token
+      const user = await UserModel.findOne({ refreshToken });
+      if (!user) {
+        console.error('User not found for refresh token');
+        return res.status(403).json({ message: 'Refresh token không hợp lệ' });
+      }
+
+      // Generate a new access token
+      const newAccessToken = jwt.sign({ _id: user._id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '15m',
+      });
+
+      console.log('New Access Token:', newAccessToken);
+      return res.json({ accessToken: newAccessToken });
     });
   } catch (error) {
+    console.error('Error in refreshToken handler:', error);
     res.status(500).json({ message: 'Lỗi server', error });
   }
 };
-
 // Đăng xuất [POST] /api/logout
 export const logout = async (req, res) => {
   try {

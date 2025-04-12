@@ -8,7 +8,6 @@ import OrderModel from '../models/orderModel.js';
 // --- Constants ---
 // ** IMPORTANT: Use Environment Variables for sensitive data! **
 const GOONG_API_KEY = process.env.GOONG_API_KEY || 'VPm5NokrnVUxZcWC3tWKf6ImVSweqe3pPyq47U5S';
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/your_db_name'; // Replace with your DB connection string
 
 const GOONG_GEOCODE_URL = 'https://rsapi.goong.io/Geocode';
 const GOONG_DISTANCE_URL = 'https://rsapi.goong.io/DistanceMatrix';
@@ -230,38 +229,32 @@ const updateStockAfterOrder = async (orderedItems) => {
 
 // --- API Endpoint: Create Order (Fully Revised) ---
 export const createOrder = async (req, res) => {
-  // ** Assume authentication middleware added req.user.id **
-  const userId = req.user?.id; // Adjust based on your auth middleware output
+  const userId = req.user?._id;
+
+  console.log('User ID from auth middleware:', userId); // Debugging line
+
   if (!userId) {
     return res.status(401).json({ error: 'Xác thực thất bại. Vui lòng đăng nhập.' });
   }
 
-  const {
-    customerName, // Needed for shipping, but not in OrderModel
-    customerPhone, // Needed for shipping, but not in OrderModel
-    toAddress, // Needed for shipping, but not in OrderModel
-    items, // [{ productId: 1, quantity: 1, size: 'L', color: 'Black' }, ...]
-    paymentMethod,
-    note = '', // Optional, not in OrderModel
-    isReturn = false, // Optional flag
-  } = req.body;
+  const { customerName, customerPhone, toAddress, items, paymentMethod, note = '', isReturn = false } = req.body;
 
-  const fromAddress = DEFAULT_FROM_ADDRESS; // Needed for shipping calc
+  const fromAddress = DEFAULT_FROM_ADDRESS;
 
   // --- 1. Input Validation ---
   let errors = [];
-  // User provided fields (even if not in schema, needed for process)
   if (!customerName) errors.push('Thiếu tên khách hàng.');
   if (!customerPhone) errors.push('Thiếu số điện thoại khách hàng.');
   if (!toAddress) errors.push('Thiếu địa chỉ giao hàng.');
-  // Payment Method
+
+  // Payment Method Validation
+  const allowedPaymentMethods = ['Cash', 'BankTransfer']; // Matches enum in orderModel
   if (!paymentMethod) {
     errors.push('Thiếu phương thức thanh toán.');
-  } else if (!ALLOWED_PAYMENT_METHODS.includes(paymentMethod)) {
-    // Use constant
-    errors.push(`Phương thức thanh toán không hợp lệ. Chỉ chấp nhận: ${ALLOWED_PAYMENT_METHODS.join(', ')}.`);
+  } else if (!allowedPaymentMethods.includes(paymentMethod)) {
+    errors.push(`Phương thức thanh toán không hợp lệ. Chỉ chấp nhận: ${allowedPaymentMethods.join(', ')}.`);
   }
-  // Items validation
+
   if (!items || !Array.isArray(items) || items.length === 0) {
     errors.push('Danh sách sản phẩm không hợp lệ hoặc rỗng.');
   } else {
@@ -283,27 +276,22 @@ export const createOrder = async (req, res) => {
   // --- 2. Process Order ---
   try {
     let subtotal = 0;
-    const validatedOrderItems = []; // To store data needed for OrderModel items
-    const itemsForStockUpdate = []; // To store info needed for stock update
+    const validatedOrderItems = [];
+    const itemsForStockUpdate = [];
 
     // --- 2a. Fetch Products, Validate Variations & Stock, Calculate Subtotal ---
     const validationPromises = items.map((item) => fetchAndValidateProductVariation(item));
     const validationResults = await Promise.all(validationPromises);
 
-    // Check for any errors during validation
     const validationErrors = validationResults.filter((result) => result.error);
     if (validationErrors.length > 0) {
-      // Combine error messages and return 400 Bad Request
       const errorDetails = validationErrors.map((errResult) => errResult.error);
-      // Determine appropriate status code (404 if *only* "not found", 400 otherwise)
       const isNotFound = validationErrors.every((e) => e.error.includes('không tồn tại'));
-      const isOutOfStock =
-        validationErrors.some((e) => e.error.includes('không đủ')) ||
-        validationErrors.some((e) => e.error.includes('không có biến thể'));
+      const isOutOfStock = validationErrors.some((e) => e.error.includes('không đủ'));
 
-      let statusCode = 400; // Bad Request (e.g., out of stock, invalid variation)
+      let statusCode = 400;
       if (isNotFound && !isOutOfStock) {
-        statusCode = 404; // Not Found
+        statusCode = 404;
       }
 
       return res.status(statusCode).json({
@@ -315,21 +303,19 @@ export const createOrder = async (req, res) => {
     // If all validations passed, calculate subtotal and prepare item data
     for (let i = 0; i < validationResults.length; i++) {
       const { product, variation } = validationResults[i];
-      const itemRequestData = items[i]; // Original item request {productId, quantity, size, color}
+      const itemRequestData = items[i];
 
       const itemTotal = product.price * itemRequestData.quantity;
       subtotal += itemTotal;
 
-      // Prepare item structure for OrderModel
       validatedOrderItems.push({
-        productVariationId: variation._id, // The ObjectId of the specific variation
-        price: product.price, // Price at the time of order
-        quantity: itemRequestData.quantity, // ** ADDING quantity **
+        productVariationId: variation._id,
+        price: product.price,
+        quantity: itemRequestData.quantity, // Thêm quantity vào item
       });
 
-      // Prepare info for stock update later
       itemsForStockUpdate.push({
-        productId: product._id, // Mongoose _id of the product document
+        productId: product._id,
         productVariationId: variation._id,
         quantity: itemRequestData.quantity,
       });
@@ -341,39 +327,36 @@ export const createOrder = async (req, res) => {
     // --- 2c. Calculate Total Amount ---
     const totalAmount = subtotal + shippingFee;
 
-    // --- 3. Prepare Order Data for Saving (Matching OrderModel + Essential Extras) ---
+    // --- 3. Prepare Order Data for Saving ---
     const newOrderData = {
-      userId: userId, // From authenticated user
-      totalPrice: totalAmount, // Final calculated total
-      status: 'Pending', // Initial status from enum
-      items: validatedOrderItems, // Array matching OrderModel items (with added quantity)
+      userId: userId,
+      totalPrice: totalAmount,
+      status: 'Pending',
+      items: validatedOrderItems,
       payment: {
         method: paymentMethod,
-        status: 'Pending', // Initial payment status
-        // transactionId: Optional, depends on payment method and flow
+        transactionId: null, // Để trống hoặc xử lý sau nếu có cổng thanh toán
+        status: 'Pending',
       },
-      // refund: {} // Not applicable at creation
-
-      // ** Fields NOT in OrderModel Schema, but needed for fulfillment **
-      // ** Strongly recommend adding these to your OrderModel schema **
-      customerInfo: { name: customerName, phone: customerPhone },
-      shippingAddress: { from: fromAddress, to: toAddress },
-      shippingDetails: { fee: shippingFee, distance: distance },
-      orderNotes: note, // Renamed from 'note' to avoid potential Mongoose conflicts
-      isReturnOrder: isReturn, // Renamed from 'isReturn'
+      shippingAddress: {
+        // Lưu thông tin giao hàng
+        fullName: customerName,
+        phone: customerPhone,
+        address: toAddress,
+      },
     };
+
+    console.log('newOrderData trước khi lưu:', JSON.stringify(newOrderData, null, 2)); // In ra newOrderData
 
     // --- 4. Save Order to Database ---
     const savedOrder = await saveOrderToDatabase(newOrderData);
 
-    // --- 5. Update Stock (Crucial Post-Save Step) ---
-    // Run this asynchronously, but handle potential errors carefully
-    await updateStockAfterOrder(itemsForStockUpdate); // Fire-and-forget might be risky
+    // --- 5. Update Stock ---
+    await updateStockAfterOrder(itemsForStockUpdate);
 
     // --- 6. Success Response ---
     res.status(201).json({
       message: 'Đặt hàng thành công!',
-      // Return the saved order (might include the added fields even if not in schema yet)
       order: savedOrder,
     });
   } catch (error) {
@@ -382,8 +365,7 @@ export const createOrder = async (req, res) => {
     if (
       error.message.includes('Lỗi Goong') ||
       error.message.includes('Không thể xác định vị trí') ||
-      error.message.includes('Không thể tính toán khoảng cách') ||
-      error.message.includes('Không thể tìm thấy tuyến đường')
+      error.message.includes('Không thể tính toán khoảng cách')
     ) {
       res.status(400).json({ error: 'Địa chỉ không hợp lệ hoặc lỗi hệ thống vận chuyển.', details: error.message });
     } else if (error.message.includes('Lỗi cơ sở dữ liệu khi kiểm tra sản phẩm')) {
@@ -391,7 +373,7 @@ export const createOrder = async (req, res) => {
     } else if (error.message.includes('Không thể lưu đơn hàng') || error.message.includes('Lỗi dữ liệu khi lưu')) {
       res.status(500).json({ error: 'Lỗi máy chủ khi lưu đơn hàng.', details: error.message });
     } else if (error.message.includes('Lỗi xác thực Goong API')) {
-      res.status(500).json({ error: 'Lỗi cấu hình hệ thống vận chuyển.', details: error.message }); // Don't expose API key issue directly
+      res.status(500).json({ error: 'Lỗi cấu hình hệ thống vận chuyển.', details: error.message });
     } else {
       res.status(500).json({ error: 'Lỗi máy chủ nội bộ không xác định khi xử lý đơn hàng.', details: error.message });
     }
