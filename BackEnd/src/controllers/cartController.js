@@ -171,3 +171,28 @@ export const updateCart = async (req, res) => {
     res.status(500).json({ message: 'Cannot update cart', error: error.message });
   }
 };
+
+export const clearCart = async (req, res) => {
+  const { userId } = req.params;
+
+  // Kiểm tra tính hợp lệ của userId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: 'Invalid userId' });
+  }
+
+  try {
+    // Tìm giỏ hàng của người dùng
+    const cart = await CartModel.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    // Xóa tất cả sản phẩm trong giỏ hàng
+    cart.items = [];
+
+    await cart.save();
+    res.status(200).json(cart);
+  } catch (error) {
+    res.status(500).json({ message: 'Cannot clear cart', error: error.message });
+  }
+};
