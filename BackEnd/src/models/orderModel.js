@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     payment: {
-      method: { type: String, enum: ['Cash', 'BankTransfer'], required: true },
+      method: { type: String, enum: ['Cash', 'Paypal'], required: true },
       transactionId: { type: String }, // Transaction ID là chuỗi
       status: { type: String, enum: ['Pending', 'Completed', 'Failed'], required: true },
     },

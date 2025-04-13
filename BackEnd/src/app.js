@@ -8,7 +8,8 @@ import defaultRoutes from './routes/index.js'; // Đảm bảo đường dẫn c
 import connectDB from './config/databse.js';
 import cookieParser from 'cookie-parser';
 import errorHandler from './middleware/errorHandler.js';
-
+import paypal from 'paypal-rest-sdk';
+import config from './config/paypal.js';
 const app = express();
 const server = createServer(app);
 
@@ -28,6 +29,7 @@ app.use(
 
 connectDB();
 
+paypal.configure(config);
 // Routes
 app.use('/', defaultRoutes);
 app.use(errorHandler);

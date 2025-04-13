@@ -10,6 +10,7 @@
   "author": "TuanNghia",
   "license": "ISC",
   "dependencies": {
+    "@paypal/paypal-server-sdk": "^1.0.0",
     "axios": "^1.8.3",
     "bcryptjs": "^3.0.2",
     "body-parser": "1.20.3",
