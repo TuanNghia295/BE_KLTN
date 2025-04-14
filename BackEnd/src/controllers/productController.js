@@ -77,6 +77,7 @@ export const getAllProducts = async (request, response) => {
   try {
     const page = parseInt(request.query.page) || 1;
     const perPage = parseInt(request.query.perPage);
+    const search = request.query.search || '';  // Nếu không có search thì mặc định là rỗng
     const totalPages = await ProductModel.countDocuments();
 
     if (page > perPage) {
@@ -87,7 +88,14 @@ export const getAllProducts = async (request, response) => {
       });
     }
 
-    const products = await ProductModel.find()
+    const query = {};
+
+    // Nếu có giá trị search, thêm điều kiện tìm kiếm vào query
+    if (search) {
+      query.name = { $regex: search, $options: 'i' };  // Tìm tên sản phẩm chứa chuỗi search (không phân biệt hoa thường)
+    }
+
+    const products = await ProductModel.find(query)
       .populate('categoryId')
       .skip((page - 1) * perPage)
       .limit(perPage)
