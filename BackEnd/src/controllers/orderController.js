@@ -159,13 +159,9 @@ export const getOrderByMonth = async (req, res) => {
 export const getOrderByUser = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { page, limit } = req.query;
-    const query = OrderModel.find({ userId }).sort({ createdAt: -1 });
+    console.log('User ID:', userId);
 
-    if (page && limit) {
-      const skip = (page - 1) * limit;
-      query.skip(skip).limit(Number(limit));
-    }
+    const query = OrderModel.find({ userId }).sort({ createdAt: -1 });
 
     const orders = await query;
     const totalOrders = await OrderModel.countDocuments({ userId });
@@ -180,12 +176,16 @@ export const getOrderDetailByUser = async (req, res) => {
   try {
     const userId = req.user._id;
     const { id } = req.params;
+    console.log({ userId, id }); // Debugging
+
     const order = await OrderModel.findOne({ _id: id, userId });
     if (!order) {
+      console.warn(`Không tìm thấy đơn hàng với ID: ${id} và userId: ${userId}`);
       return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
     }
     res.status(200).json(order);
   } catch (error) {
+    console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
     res.status(500).json({ message: 'Lỗi khi lấy chi tiết đơn hàng', error: error.message });
   }
 };
