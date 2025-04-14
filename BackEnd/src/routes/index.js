@@ -6,6 +6,7 @@ import cartRouter from './cartRouter.js';
 import categoryRouter from './categoryRouter.js';
 import paymentRouter from './paymentRouter.js';
 import userRouter from './userRouter.js';
+import orderRouter from './orderRouter.js';
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.use('/auth', authRouter);
 router.use('/cart', cartRouter);
 router.use('/category', categoryRouter);
 router.use('/payment', paymentRouter);
+router.use('/orders', orderRouter);
 
 export default router;
