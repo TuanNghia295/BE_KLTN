@@ -121,14 +121,25 @@ export const getAllProducts = async (request, response) => {
 // Lấy toàn bộ sản phẩm trong từng danh mục (categoryId)
 export const getAllProductsByCategoryId = async (req, res) => {
   const { categoryId } = req.params;
-  const { page, limit, sort, type } = req.query;
+  const { page, limit, sort, type, search } = req.query;
 
   const pageNumber = parseInt(page) || 1;
   const limitNumber = parseInt(limit) || 10;
   const sortObject = { [sort]: type === 'DESC' ? -1 : 1 };
 
+  // Điều kiện query chính
+  const query = { categoryId };
+
+  // Thêm tìm kiếm theo tên (hoặc mô tả nếu bạn muốn)
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } }
+    ];
+  }
+
   try {
-    const products = await ProductModel.find({ categoryId })
+    const products = await ProductModel.find(query)
       .sort(sortObject)
       .skip((pageNumber - 1) * limitNumber)
       .limit(limitNumber)
