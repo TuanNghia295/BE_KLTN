@@ -410,7 +410,7 @@ export const createOrder = async (req, res) => {
       }
     } else if (paymentMethod === 'Cash') {
       // Cập nhật trạng thái và payment status cho đơn COD
-      savedOrderDoc.status = 'Processing';
+      savedOrderDoc.status = 'Pending';
       savedOrderDoc.payment.status = 'Pending'; // Vẫn là Pending cho COD
       const updatedOrder = await savedOrderDoc.save();
 
@@ -552,7 +552,7 @@ export const paypalSuccess = async (req, res) => {
       const paypalTransactionId = captureData.purchase_units?.[0]?.payments?.captures?.[0]?.id || captureData.id;
 
       // Update order and payment status
-      order.status = 'Processing';
+      order.status = 'Pending';
       order.payment.status = 'Completed';
       order.payment.transactionId = paypalTransactionId; // Lưu ID giao dịch capture
       await order.save();
