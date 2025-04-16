@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema(
     },
     items: [
       {
+        productId: { type: Number, unique: true },
         productVariationId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product.variations',

@@ -344,6 +344,7 @@ export const createOrder = async (req, res) => {
       const itemTotal = product.price * itemRequestData.quantity;
       subtotal += itemTotal;
       validatedOrderItems.push({
+        productId: itemRequestData.productId, // Include productId in the order items
         productVariationId: variation._id,
         price: product.price,
         quantity: itemRequestData.quantity,
