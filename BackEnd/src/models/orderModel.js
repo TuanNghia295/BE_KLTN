@@ -12,10 +12,21 @@ const orderSchema = new mongoose.Schema(
     items: [
       {
         productId: { type: Number, unique: true },
+        images: [
+          {
+            url: { type: String, required: true },
+            isPrimary: { type: Boolean, default: false }, // Ảnh chính
+            order: Number, // Thứ tự hiển thị
+            publicId: { type: String }, // Lưu publicId từ Cloudinary để quản lý
+          },
+        ],
+        name: { type: String, required: true },
         productVariationId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product.variations',
         },
+        size: { type: String, required: true },
+        color: { type: String, required: true },
         price: { type: Number, required: true },
         quantity: { type: Number, required: true }, // Thêm số lượng sản phẩm
       },

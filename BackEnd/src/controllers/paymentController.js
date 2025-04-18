@@ -269,6 +269,7 @@ const updateStockAfterOrder = async (orderedItems) => {
       .filter((op) => op !== null); // Lọc bỏ các operation null
 
     if (bulkOps.length > 0) {
+      // bulk write là phương thức để thực hiện nhiều cập nhật trong một lần gọi
       console.log('Thực hiện bulk update kho:', JSON.stringify(bulkOps, null, 2));
       const result = await ProductModel.bulkWrite(bulkOps);
       console.log('Kết quả cập nhật kho:', result);
@@ -344,8 +345,17 @@ export const createOrder = async (req, res) => {
       const itemTotal = product.price * itemRequestData.quantity;
       subtotal += itemTotal;
       validatedOrderItems.push({
-        productId: itemRequestData.productId, // Include productId in the order items
+        productId: product.productId, // Include productId
+        images: product.images.map((image) => ({
+          url: image.url,
+          isPrimary: image.isPrimary || false,
+          order: image.order || null,
+          publicId: image.publicId || null,
+        })), // Include product images
+        name: product.name, // Include product name
         productVariationId: variation._id,
+        size: variation.size, // Include size
+        color: variation.color, // Include color
         price: product.price,
         quantity: itemRequestData.quantity,
       });

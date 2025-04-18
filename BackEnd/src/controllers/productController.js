@@ -77,7 +77,7 @@ export const getAllProducts = async (request, response) => {
   try {
     const page = parseInt(request.query.page) || 1;
     const perPage = parseInt(request.query.perPage);
-    const search = request.query.search || '';  // Nếu không có search thì mặc định là rỗng
+    const search = request.query.search || ''; // Nếu không có search thì mặc định là rỗng
     const totalPages = await ProductModel.countDocuments();
 
     if (page > perPage) {
@@ -92,7 +92,7 @@ export const getAllProducts = async (request, response) => {
 
     // Nếu có giá trị search, thêm điều kiện tìm kiếm vào query
     if (search) {
-      query.name = { $regex: search, $options: 'i' };  // Tìm tên sản phẩm chứa chuỗi search (không phân biệt hoa thường)
+      query.name = { $regex: search, $options: 'i' }; // Tìm tên sản phẩm chứa chuỗi search (không phân biệt hoa thường)
     }
 
     const products = await ProductModel.find(query)
@@ -132,10 +132,7 @@ export const getAllProductsByCategoryId = async (req, res) => {
 
   // Thêm tìm kiếm theo tên (hoặc mô tả nếu bạn muốn)
   if (search) {
-    query.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { description: { $regex: search, $options: 'i' } }
-    ];
+    query.$or = [{ name: { $regex: search, $options: 'i' } }, { description: { $regex: search, $options: 'i' } }];
   }
 
   try {
@@ -180,6 +177,7 @@ export const getSingleProduct = async (request, response) => {
   const productId = request.params.id;
   try {
     // Tìm sản phẩm trong cơ sở dữ liệu
+
     const product = await ProductModel.findById(productId).populate('categoryId');
 
     // Nếu không tìm thấy sản phẩm, trả về lỗi 404
