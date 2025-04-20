@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
     },
     items: [
       {
-        productId: { type: Number, unique: true },
+        productId: { type: Number },
         images: [
           {
             url: { type: String, required: true },
@@ -44,6 +44,8 @@ const orderSchema = new mongoose.Schema(
       fullName: { type: String, required: true },
       phone: { type: String, required: true },
       address: { type: String, required: true },
+      distance: { type: Number }, // Khoảng cách từ địa chỉ giao hàng đến cửa hàng
+      shippingFee: { type: Number }, // Phí giao hàng
     },
   },
   { timestamps: true } // Tự động thêm createdAt và updatedAt

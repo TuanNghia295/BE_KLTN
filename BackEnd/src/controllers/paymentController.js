@@ -2,6 +2,7 @@ import axios from 'axios';
 import mongoose from 'mongoose';
 import ProductModel from '../models/productModel.js';
 import OrderModel from '../models/orderModel.js';
+import CartModel from '../models/cartModel.js';
 // Bạn có thể cần import uuid nếu muốn dùng cho idempotency key của PayPal
 // import { v4 as uuidv4 } from 'uuid';
 
@@ -381,7 +382,13 @@ export const createOrder = async (req, res) => {
       status: 'Pending',
       items: validatedOrderItems,
       payment: { method: paymentMethod, transactionId: null, status: 'Pending' },
-      shippingAddress: { fullName: customerName, phone: customerPhone, address: toAddress },
+      shippingAddress: {
+        fullName: customerName,
+        phone: customerPhone,
+        address: toAddress,
+        shippingFee: shippingFee, // Include shipping fee
+        distance: distance, // Include distance
+      },
     };
 
     console.log('newOrderData trước khi lưu:', JSON.stringify(newOrderData, null, 2));
@@ -395,6 +402,17 @@ export const createOrder = async (req, res) => {
     // --- 5. Handle Payment Method ---
     if (paymentMethod === 'Paypal') {
       try {
+        try {
+          await CartModel.findOneAndUpdate(
+            { userId: userId },
+            { $pull: { items: { productId: { $in: validatedOrderItems.map((item) => item.productId) } } } },
+            { new: true }
+          );
+          console.log('Đã xóa các sản phẩm đã đặt khỏi giỏ hàng.');
+        } catch (cartError) {
+          console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', cartError);
+        }
+
         // Tạo thanh toán PayPal
         const { approvalUrl, paypalOrderId } = await createPayPalOrderAPI(
           totalAmountUSD,
@@ -427,6 +445,18 @@ export const createOrder = async (req, res) => {
 
       // Cập nhật kho hàng cho đơn COD
       await updateStockAfterOrder(itemsForStockUpdate);
+
+      // --- 6. Clear Cart After Successful Order ---
+      try {
+        await CartModel.findOneAndUpdate(
+          { userId: userId },
+          { $pull: { items: { productId: { $in: validatedOrderItems.map((item) => item.productId) } } } },
+          { new: true }
+        );
+        console.log('Đã xóa các sản phẩm đã đặt khỏi giỏ hàng.');
+      } catch (cartError) {
+        console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', cartError);
+      }
 
       res.status(201).json({
         message: 'Đặt hàng thành công!',
