@@ -21,6 +21,11 @@ export const getCartByUserId = async (req, res) => {
     const populatedItems = await Promise.all(
       cart.items.map(async (item) => {
         const product = await ProductModel.findOne({ productId: item.productId });
+
+        if (product.categoryId.toString() === '68063c44ea2657dc88160f1f') {
+          product.price = product.price * 0.9
+        }
+
         return {
           ...item.toObject(),
           product,

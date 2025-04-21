@@ -180,6 +180,10 @@ export const getSingleProduct = async (request, response) => {
 
     const product = await ProductModel.findById(productId).populate('categoryId');
 
+    if (product.categoryId.type === 'Sale') {
+      product.price = product.price * 0.9
+    }
+
     // Nếu không tìm thấy sản phẩm, trả về lỗi 404
     if (!product) {
       return response.status(404).json({
