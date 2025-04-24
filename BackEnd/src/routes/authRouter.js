@@ -1,6 +1,14 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { createUser, login, loginAdmin, refreshToken, logout } from '../controllers/authController.js';
+import {
+  createUser,
+  login,
+  loginAdmin,
+  refreshToken,
+  logout,
+  resetPassword,
+  updatePassword,
+} from '../controllers/authController.js';
 
 const authRouter = express.Router();
 
@@ -19,6 +27,8 @@ authRouter.post(
 );
 
 authRouter.post('/login', login);
+authRouter.post('/reset-password', resetPassword);
+authRouter.post('/update-password', updatePassword);
 authRouter.post('/login/admin', loginAdmin);
 authRouter.post('/refresh_token', refreshToken);
 authRouter.post('/logout', logout);

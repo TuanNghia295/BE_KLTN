@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema(
     refreshToken: { type: String, default: null },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
+    firebaseUid: { type: String },
   },
   {
     timestamps: true,

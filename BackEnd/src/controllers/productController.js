@@ -14,7 +14,6 @@ export const createProduct = async (request, response) => {
   try {
     const { name, price, description, categoryId, variations } = request.body;
     const imageFiles = request.files;
-
     if (!imageFiles || imageFiles.length === 0) {
       return response.status(400).json({ message: 'Vui lòng tải lên ít nhất một ảnh' });
     }
@@ -77,8 +76,10 @@ export const getAllProducts = async (request, response) => {
   try {
     const page = parseInt(request.query.page) || 1;
     const perPage = parseInt(request.query.perPage);
-    const search = request.query.search || ''; // Nếu không có search thì mặc định là rỗng
+    const search = request.query.q || ''; // Nếu không có search thì mặc định là rỗng
     const totalPages = await ProductModel.countDocuments();
+
+    console.log('SEarch', search);
 
     if (page > perPage) {
       return response.status(404).json({
@@ -181,7 +182,7 @@ export const getSingleProduct = async (request, response) => {
     const product = await ProductModel.findById(productId).populate('categoryId');
 
     if (product.categoryId.type === 'Sale') {
-      product.price = product.price * 0.9
+      product.price = product.price * 0.9;
     }
 
     // Nếu không tìm thấy sản phẩm, trả về lỗi 404
