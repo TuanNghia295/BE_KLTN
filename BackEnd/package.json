@@ -5,11 +5,13 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "type": "module"
   },
   "author": "TuanNghia",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@paypal/paypal-server-sdk": "^1.0.0",
     "axios": "^1.8.3",
     "bcryptjs": "^3.0.2",
