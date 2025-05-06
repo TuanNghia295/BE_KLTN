@@ -3,6 +3,9 @@ dotenv.config();
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import ProductModel from '../models/productModel.js';
 import OrderModel from '../models/orderModel.js';
+import axios from 'axios';
+import { EventSource } from 'eventsource';
+import { createParser } from 'eventsource-parser';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -165,13 +168,13 @@ export async function chatWithAI(req, res) {
           replyMessage =
             language === 'vi'
               ? `Đã ghi nhận yêu cầu đặt ${quantity} sản phẩm "${productInfo}"` +
-                (orderSize ? ` size ${orderSize}` : '') +
-                (orderColor ? ` màu ${orderColor}` : '') +
-                '. Bạn có muốn thêm vào giỏ hàng không?'
+              (orderSize ? ` size ${orderSize}` : '') +
+              (orderColor ? ` màu ${orderColor}` : '') +
+              '. Bạn có muốn thêm vào giỏ hàng không?'
               : `Noted your request to order ${quantity} of "${productInfo}"` +
-                (orderSize ? ` size ${orderSize}` : '') +
-                (orderColor ? ` color ${orderColor}` : '') +
-                '. Would you like to add it to your cart?';
+              (orderSize ? ` size ${orderSize}` : '') +
+              (orderColor ? ` color ${orderColor}` : '') +
+              '. Would you like to add it to your cart?';
           resultData.orderInfo = parameters;
           if (foundProduct)
             resultData.foundProduct = {
@@ -254,3 +257,123 @@ export async function chatWithAI(req, res) {
     res.status(500).json({ message: 'An internal server error occurred. Please check server logs for details.' });
   }
 }
+
+
+export async function chatWithCoze(req, res) {
+  const { user_id, additional_messages } = req.body;
+
+  try {
+    const response = await axios.post(
+      'https://api.coze.com/v3/chat',
+      {
+        bot_id: '7500453264618799105',
+        user_id,
+        stream: true,
+        auto_save_history: true,
+        additional_messages,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer pat_VeeRGFeJx7dNapqQYuWdP2q3TZT7TktjaRgRgEVUCqipf9nrVxfaBMq02WiZLZmG',
+          'Content-Type': 'application/json',
+        },
+        responseType: 'stream',
+      }
+    );
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    const messages = []; // Mảng lưu trữ các message trả về
+    console.log(messages)
+    
+    const parser = createParser({
+      onEvent: (event) => {
+        if (event.event === "conversation.message.completed") {
+          try {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === "answer" || data.type === "follow_up") {
+              messages.push({
+                data
+              })
+            }
+          } catch (err) {
+            console.error('❌ JSON parse lỗi:', err);
+          }
+        }
+        // if (event.type === 'event' && event.event === 'conversation.message.completed') {
+        //   try {
+        //     const data = JSON.parse(event.data);
+        //     console.log('Dat', data)
+        //     if (data.type === 'answer' || data.type === 'follow_up') {
+        //       messages.push({
+        //         event: event.event,
+        //         data,
+        //       });
+        //     }
+        //   } catch (err) {
+        //     console.error('❌ JSON parse lỗi:', err);
+        //   }
+        // }
+      },
+    });
+
+    response.data.on('data', (chunk) => {
+      parser.feed(chunk.toString());
+      // Chuyển chunk thành chuỗi
+      // const chunkStr = chunk.toString();
+
+      // Tiến hành xử lý dữ liệu trong chunk
+      // if (chunkStr.includes('event:')) {
+      //   const eventIndex = chunkStr.indexOf('event:');
+      //   const eventEndIndex = chunkStr.indexOf('\n', eventIndex);
+      //   currentEvent = chunkStr.slice(eventIndex + 6, eventEndIndex).trim(); // Lấy event
+      // }
+
+      // if (chunkStr.includes('data:') && currentEvent === "conversation.message.completed") {
+      //   const dataIndex = chunkStr.indexOf('data:');
+      //   const dataEndIndex = chunkStr.indexOf('\n', dataIndex);
+      //   const jsonData = chunkStr.slice(dataIndex + 5, dataEndIndex).trim(); // Lấy dữ liệu
+
+      //   try {
+      //     if (jsonData.includes('"type":"answer"') || jsonData.includes('"type":"follow_up"')) {
+      //       const parsedData = JSON.parse(jsonData);
+
+      //       // Gom nhóm event và data thành một đối tượng
+      //       const message = {
+      //         event: currentEvent,
+      //         data: parsedData
+      //       };
+
+      //       // Đẩy message vào mảng
+      //       messages.push(message);
+      //     }
+      //   } catch (err) {
+      //     console.error('❌ Lỗi khi parse dữ liệu JSON:', err);
+      //   }
+      // }
+
+    });
+
+    response.data.on('end', () => {
+      // Gửi dữ liệu về client khi stream kết thúc
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Connection', 'close'); // đảm bảo đóng kết nối
+      res.write(JSON.stringify(messages));
+      res.end();
+    });
+
+
+    response.data.on('error', (err) => {
+      res.end();
+    });
+
+  } catch (err) {
+    console.error('❌ Lỗi trong chatWithCoze:', err);
+    res.status(500).json({ error: 'Lỗi từ proxy server' });
+  }
+}
+
+
