@@ -76,7 +76,7 @@ export const getAllProducts = async (request, response) => {
   try {
     const page = parseInt(request.query.page) || 1;
     const perPage = parseInt(request.query.perPage);
-    const search = request.query.q || ''; // Nếu không có search thì mặc định là rỗng
+    const search = request.query.search || ''; // Nếu không có search thì mặc định là rỗng
     const totalPages = await ProductModel.countDocuments();
 
     console.log('SEarch', search);
