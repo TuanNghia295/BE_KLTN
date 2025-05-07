@@ -5,7 +5,7 @@ services:
     plan: free
     branch: Nghia_BE
     buildCommand: npm install
-    startCommand: node src/app.js
+    startCommand: node BackEnd/src/app.js
     rootDir: ./BackEnd
     envVars:
       - key: NODE_ENV
