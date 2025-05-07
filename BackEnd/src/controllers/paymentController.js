@@ -564,7 +564,7 @@ export const paypalSuccess = async (req, res) => {
   if (!paypalOrderIdFromToken || !internalOrderId) {
     console.error('Thiếu thông tin token (PayPal Order ID) hoặc orderId trong callback PayPal success');
     return res.redirect(
-      `http://localhost:5173/payment/error?message=InvalidCallbackData&orderId=${internalOrderId || 'unknown'}`
+      `${process.env.URL_FRONTEND}/payment/error?message=InvalidCallbackData&orderId=${internalOrderId || 'unknown'}`
     );
   }
 
@@ -576,13 +576,13 @@ export const paypalSuccess = async (req, res) => {
     order = await OrderModel.findById(internalOrderId);
     if (!order) {
       console.error(`Không tìm thấy đơn hàng với ID: ${internalOrderId}`);
-      return res.redirect(`http://localhost:5173/payment/error?message=OrderNotFound&orderId=${internalOrderId}`);
+      return res.redirect(`${process.env.URL_FRONTEND}/payment/error?message=OrderNotFound&orderId=${internalOrderId}`);
     }
     if (order.status !== 'Pending' || order.payment.status !== 'Pending') {
       console.warn(
         `Đơn hàng ${internalOrderId} đã được xử lý hoặc trạng thái không hợp lệ (${order.status}, ${order.payment.status}).`
       );
-      return res.redirect(`http://localhost:5173/order-details/${internalOrderId}?status=already_processed`);
+      return res.redirect(`${process.env.URL_FRONTEND}/order-details/${internalOrderId}?status=already_processed`);
     }
 
     // Capture the PayPal payment using the PayPal Order ID
@@ -620,7 +620,7 @@ export const paypalSuccess = async (req, res) => {
       }
 
       // Redirect to frontend success page
-      res.redirect(`http://localhost:5173/checkout/success?orderId=${internalOrderId}`);
+      res.redirect(`${process.env.URL_FRONTEND}/checkout/success?orderId=${internalOrderId}`);
     } else {
       console.error(
         `Capture thanh toán PayPal không thành công cho đơn hàng ${internalOrderId}. Status:`,
@@ -629,7 +629,7 @@ export const paypalSuccess = async (req, res) => {
       order.status = 'Cancelled';
       order.payment.status = 'Failed';
       await order.save();
-      res.redirect(`http://localhost:5173/payment/error?message=PaymentCaptureFailed&orderId=${internalOrderId}`);
+      res.redirect(`${process.env.URL_FRONTEND}/payment/error?message=PaymentCaptureFailed&orderId=${internalOrderId}`);
     }
   } catch (error) {
     console.error(`Lỗi khi xử lý callback PayPal success cho đơn hàng ${internalOrderId}:`, error);
@@ -643,7 +643,9 @@ export const paypalSuccess = async (req, res) => {
         console.error(`Lỗi khi cập nhật trạng thái đơn hàng ${internalOrderId} thành Failed:`, updateError);
       }
     }
-    res.redirect(`http://localhost:5173/payment/error?message=ProcessingError&orderId=${internalOrderId || 'unknown'}`);
+    res.redirect(
+      `${process.env.URL_FRONTEND}/payment/error?message=ProcessingError&orderId=${internalOrderId || 'unknown'}`
+    );
   }
 };
 
@@ -654,7 +656,7 @@ export const paypalCancel = async (req, res) => {
 
   if (!internalOrderId) {
     console.warn('Callback hủy PayPal không có orderId.');
-    return res.redirect(`http://localhost:5173/payment/cancel`);
+    return res.redirect(`${process.env.URL_FRONTEND}/payment/cancel`);
   }
 
   try {
@@ -671,5 +673,5 @@ export const paypalCancel = async (req, res) => {
   } catch (error) {
     console.error(`Lỗi khi cập nhật trạng thái đơn hàng ${internalOrderId} thành Cancelled:`, error);
   }
-  res.redirect(`http://localhost:5173/payment/cancel?orderId=${internalOrderId}`);
+  res.redirect(`${process.env.URL_FRONTEND}/payment/cancel?orderId=${internalOrderId}`);
 };

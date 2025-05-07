@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: iuh-shoes-backend
+    env: node
+    plan: free
+    branch: Nghia_BE
+    buildCommand: npm install
+    startCommand: node src/app.js
+    rootDir: ./BackEnd
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GEMINI_API_KEY
+        value: "AIzaSyBNgSo4dSmGHLyuPJLI3hfjg5kMJZ7U33g"
+      - key: PAYPAL_CLIENT_ID
+        value: "ASdJeRp0R7bgOOIJisXHP8wj99Qn9obdYy10ZVA7NVkliLjleW54wYonEZSTkpO0Y2F0kKyNYfGtR4c7"
+      - key: PAYPAL_CLIENT_SECRET
+        value: "EAsfPKoJCsOIfPepHQyaksz1cJEa0WQ1OUO8EhY3suBW0ULzFjkPNSbC4vm73xS9XJUzuBpX27tkLQ8g"
+      - key: GOONG_API_KEY
+        value: "VPm5NokrnVUxZcWC3tWKf6ImVSweqe3pPyq47U5S"
+      - key: MONGO_PASS
+        value: "tuannghia2905"
+      - key: ACCESS_TOKEN_SECRET
+        value: "6052d1dcf46bff5f24a889aa9e3dc8713ede0e533bc3b023e72714e98f306e354adb37865173e17181d2a4f11bc25cf2a241b83a49a97ac95f606a4ee617f7f1"
+      - key: REFRESH_TOKEN_SECRET
+        value: "4dec3bdc5b1cd8a4683dbf69dd866e7e5460c1d0c9fd0fdd3baab7f155a3439e6c6459c02a2dbf0a21470b0354bcb4de838484156edebfe25952207af9f7a8fe"
