@@ -12,7 +12,7 @@ const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID || 'YOUR_PAYPAL_CLIENT_ID'
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET || 'YOUR_PAYPAL_CLIENT_SECRET'; // Thay thế
 const PAYPAL_API_BASE =
   process.env.NODE_ENV === 'production'
-    ? 'https://api-m.paypal.com' // Live environment
+    ? 'https://api-m.sandbox.paypal.com' // Live environment
     : 'https://api-m.sandbox.paypal.com'; // Sandbox environment
 
 const GOONG_GEOCODE_URL = 'https://rsapi.goong.io/Geocode';
