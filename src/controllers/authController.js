@@ -8,38 +8,25 @@ dotenv.config();
 
 // Tạo user [POST] /api/register
 export const createUser = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   const { userName, fullName, phone, email, password, role, address } = req.body;
 
   try {
-    if (!password) {
-      return res.status(400).json({ message: 'Password is required' });
-    }
+    if (!password) return res.status(400).json({ message: 'Password is required' });
 
-    // Tạo người dùng trong Firebase Auth
     const firebaseUser = await admin.auth().createUser({
       email,
       password,
       displayName: fullName,
     });
 
-    console.log('Firebase UID:', firebaseUser.uid);
-
-    const hashedPassword = await bcrypt.hash(password, 12);
-
     const user = new UserModel({
       userName,
       fullName,
       phone,
       email,
-      password: hashedPassword,
       role,
       address: Array.isArray(address) ? address : [address],
-      firebaseUid: firebaseUser.uid, // Lưu Firebase UID
+      firebaseUid: firebaseUser.uid,
     });
 
     const accessToken = user.generateAccessToken();
@@ -67,27 +54,22 @@ export const createUser = async (req, res, next) => {
 
 // Đăng nhập [POST] /api/login
 export const login = async (req, res) => {
-  const { phone, password } = req.body;
+  const { firebaseUid } = req.body;
 
-  if (!phone || !password) {
-    return res.status(400).json({ statusCode: 400, message: 'Vui lòng nhập số điện thoại và mật khẩu' });
+  if (!firebaseUid) {
+    return res.status(400).json({ message: 'Thiếu Firebase UID' });
   }
 
-  const userExist = await UserModel.findOne({ phone, role: 'USER' });
-  if (!userExist) {
-    return res.status(404).json({ statusCode: 404, message: 'Tài khoản không tồn tại' });
+  const user = await UserModel.findOne({ firebaseUid });
+  if (!user) {
+    return res.status(404).json({ message: 'Không tìm thấy người dùng' });
   }
 
-  const isPasswordCorrect = await bcrypt.compare(password, userExist.password);
-  if (!isPasswordCorrect) {
-    return res.status(400).json({ statusCode: 400, message: 'Mật khẩu hoặc tài khoản không đúng' });
-  }
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
 
-  const accessToken = userExist.generateAccessToken();
-  const refreshToken = userExist.generateRefreshToken();
-
-  userExist.refreshToken = refreshToken;
-  await userExist.save();
+  user.refreshToken = refreshToken;
+  await user.save();
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
@@ -95,14 +77,13 @@ export const login = async (req, res) => {
   });
 
   res.status(200).json({
-    statusCode: 200,
     data: {
-      _id: userExist._id,
-      fullName: userExist.fullName,
-      phone: userExist.phone,
-      email: userExist.email,
-      role: userExist.role,
-      address: userExist.address, // Address is now an array
+      _id: user._id,
+      fullName: user.fullName,
+      phone: user.phone,
+      email: user.email,
+      role: user.role,
+      address: user.address,
       accessToken,
     },
   });
@@ -110,35 +91,38 @@ export const login = async (req, res) => {
 
 // Đăng nhập với admin [POST] /api/login/admin
 export const loginAdmin = async (req, res) => {
-  const { phone, password } = req.body;
-  console.log('Phone:', phone);
-  console.log('Password:', password);
+  const { firebaseUid } = req.body;
 
-  const userExist = await UserModel.findOne({ phone, role: 'ADMIN' });
-  console.log('User Exist:', userExist);
+  if (!firebaseUid) {
+    return res.status(400).json({ message: 'Thiếu Firebase UID' });
+  }
 
-  if (!userExist) {
-    return res.status(404).json({ statusCode: 404, message: 'Tài khoản không tồn tại' });
+  const user = await UserModel.findOne({ firebaseUid });
+  if (!user) {
+    return res.status(404).json({ message: 'Không tìm thấy người dùng' });
   }
-  const isPasswordCorrect = await bcrypt.compare(password, userExist.password);
-  if (!isPasswordCorrect) {
-    return res.status(400).json({ statusCode: 400, message: 'Mật khẩu hoặc tài khoản không đúng' });
-  }
-  const accessToken = userExist.generateAccessToken();
-  const refreshToken = userExist.generateRefreshToken();
-  userExist.refreshToken = refreshToken;
-  await userExist.save();
+
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
+
+  user.refreshToken = refreshToken;
+  await user.save();
+
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
   });
+
   res.status(200).json({
-    fullName: userExist.fullName,
-    phone: userExist.phone,
-    email: userExist.email,
-    role: userExist.role,
-    address: userExist.address, // Address is now an array
-    accessToken,
+    data: {
+      _id: user._id,
+      fullName: user.fullName,
+      phone: user.phone,
+      email: user.email,
+      role: user.role,
+      address: user.address,
+      accessToken,
+    },
   });
 };
 
@@ -257,52 +241,16 @@ export const resetPassword = async (req, res) => {
 };
 
 export const updatePassword = async (req, res) => {
-  try {
-    const { email, newPassword } = req.body;
+  const { email, newPassword } = req.body;
 
-    if (!email || !newPassword) {
-      return res.status(400).json({ message: 'Email và mật khẩu mới là bắt buộc' });
-    }
-
-    // Kiểm tra người dùng trong MongoDB
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: 'Người dùng không tồn tại' });
-    }
-
-    // Kiểm tra firebaseUid trước khi cập nhật mật khẩu
-    if (!user.firebaseUid || typeof user.firebaseUid !== 'string' || user.firebaseUid.length > 128) {
-      return res.status(400).json({
-        message: 'UID không hợp lệ hoặc không tồn tại.',
-      });
-    }
-
-    // Đồng bộ mật khẩu mới với MongoDB
-    try {
-      // Cập nhật mật khẩu trong Firebase Auth
-      await admin.auth().updateUser(user.firebaseUid, {
-        password: newPassword,
-      });
-
-      // Hash và lưu mật khẩu mới vào MongoDB
-      const hashedPassword = await bcrypt.hash(newPassword, 12);
-      user.password = hashedPassword;
-      await user.save();
-
-      return res.status(200).json({
-        message: 'Mật khẩu đã được cập nhật thành công',
-      });
-    } catch (error) {
-      console.error('Error updating password in Firebase or MongoDB:', error);
-      return res.status(500).json({
-        message: 'Lỗi khi cập nhật mật khẩu',
-        error: error.message,
-      });
-    }
-  } catch (error) {
-    console.error('Error in updatePassword:', error);
-    return res.status(500).json({
-      message: 'Lỗi khi cập nhật mật khẩu',
-    });
+  const user = await UserModel.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: 'Người dùng không tồn tại' });
   }
+
+  await admin.auth().updateUser(user.firebaseUid, {
+    password: newPassword,
+  });
+
+  return res.status(200).json({ message: 'Mật khẩu đã được cập nhật thành công' });
 };
