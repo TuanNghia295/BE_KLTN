@@ -1,19 +1,21 @@
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
+import fs from 'fs';
 dotenv.config();
 
-const serviceAccountJsonString = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+const serviceAccountFilePath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
 
-if (!serviceAccountJsonString) {
-  console.error('Firebase service account key JSON not found in environment variables.');
+if (!serviceAccountFilePath) {
+  console.error('Firebase service account key file path not found in environment variables.');
   process.exit(1);
 }
 
 let serviceAccount;
 try {
-  serviceAccount = JSON.parse(serviceAccountJsonString);
+  const serviceAccountContent = fs.readFileSync(serviceAccountFilePath, 'utf8');
+  serviceAccount = JSON.parse(serviceAccountContent);
 } catch (error) {
-  console.error('Failed to parse Firebase service account key JSON:', error);
+  console.error('Failed to read or parse Firebase service account key file:', error);
   process.exit(1);
 }
 
