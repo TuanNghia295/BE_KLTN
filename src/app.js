@@ -22,7 +22,7 @@ app.use(cookieParser()); // Để đọc cookies
 
 app.use(
   cors({
-    origin: true, // Chỉ cho phép frontend truy cập
+    origin: ['https://iuhshoes.netlify.app'],
     credentials: true, // Cho phép gửi cookie
   })
 );
