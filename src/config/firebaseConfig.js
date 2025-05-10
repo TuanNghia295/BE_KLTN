@@ -1,17 +1,30 @@
 import admin from 'firebase-admin';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const serviceAccountJsonString = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
 
-const serviceAccountPath = path.resolve(__dirname, './khoaluantotnghiep-f279c-firebase-adminsdk-fbsvc-3b44d56f32.json');
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
+if (!serviceAccountJsonString) {
+  console.error('Firebase service account key JSON not found in environment variables.');
+  process.exit(1);
+}
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+let serviceAccount;
+try {
+  serviceAccount = JSON.parse(serviceAccountJsonString);
+} catch (error) {
+  console.error('Failed to parse Firebase service account key JSON:', error);
+  process.exit(1);
+}
 
-console.log('Firebase Admin SDK initialized successfully');
+try {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  console.log('Firebase Admin SDK initialized successfully');
+} catch (error) {
+  console.error('Firebase Admin SDK initialization failed:', error);
+  process.exit(1);
+}
+
 export default admin;
