@@ -27,6 +27,8 @@ export const createUser = async (req, res, next) => {
       displayName: fullName,
     });
 
+    console.log('Firebase UID:', firebaseUser.uid);
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = new UserModel({
@@ -71,7 +73,7 @@ export const login = async (req, res) => {
     return res.status(400).json({ statusCode: 400, message: 'Vui lòng nhập số điện thoại và mật khẩu' });
   }
 
-  const userExist = await UserModel.findOne({ phone });
+  const userExist = await UserModel.findOne({ phone, role: 'USER' });
   if (!userExist) {
     return res.status(404).json({ statusCode: 404, message: 'Tài khoản không tồn tại' });
   }
@@ -109,7 +111,12 @@ export const login = async (req, res) => {
 // Đăng nhập với admin [POST] /api/login/admin
 export const loginAdmin = async (req, res) => {
   const { phone, password } = req.body;
+  console.log('Phone:', phone);
+  console.log('Password:', password);
+
   const userExist = await UserModel.findOne({ phone, role: 'ADMIN' });
+  console.log('User Exist:', userExist);
+
   if (!userExist) {
     return res.status(404).json({ statusCode: 404, message: 'Tài khoản không tồn tại' });
   }
@@ -219,18 +226,27 @@ export const resetPassword = async (req, res) => {
     }
 
     const actionCodeSettings = {
-      url: process.env.CLIENT_URL,
+      url: `${process.env.CLIENT_URL}/reset-password?email=${encodeURIComponent(email)}`,
       handleCodeInApp: true,
     };
     console.log('Action Code Settings:', actionCodeSettings);
 
     // Gửi link reset qua Firebase Auth
-    const resetLink = await admin.auth().generatePasswordResetLink(email, actionCodeSettings);
-    console.log('Password Reset Link:', resetLink);
+    try {
+      const resetLink = await admin.auth().generatePasswordResetLink(email, actionCodeSettings);
+      console.log('Generated Password Reset Link:', resetLink);
 
-    return res.status(200).json({
-      message: 'Email đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra hộp thư.',
-    });
+      return res.status(200).json({
+        message: 'Email đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra hộp thư.',
+        resetLink, // Trả về link để debug nếu cần
+      });
+    } catch (error) {
+      console.error('Error generating reset link:', error);
+      return res.status(500).json({
+        message: 'Lỗi khi tạo link đặt lại mật khẩu',
+        error: error.message,
+      });
+    }
   } catch (error) {
     console.error('Error in resetPassword:', error.code, error.message);
     return res.status(500).json({
@@ -254,19 +270,35 @@ export const updatePassword = async (req, res) => {
       return res.status(404).json({ message: 'Người dùng không tồn tại' });
     }
 
-    // Cập nhật mật khẩu trong Firebase Auth
-    await admin.auth().updateUser(user.firebaseUid, {
-      password: newPassword,
-    });
+    // Kiểm tra firebaseUid trước khi cập nhật mật khẩu
+    if (!user.firebaseUid || typeof user.firebaseUid !== 'string' || user.firebaseUid.length > 128) {
+      return res.status(400).json({
+        message: 'UID không hợp lệ hoặc không tồn tại.',
+      });
+    }
 
-    // Hash và cập nhật mật khẩu trong MongoDB
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
-    user.password = hashedPassword;
-    await user.save();
+    // Đồng bộ mật khẩu mới với MongoDB
+    try {
+      // Cập nhật mật khẩu trong Firebase Auth
+      await admin.auth().updateUser(user.firebaseUid, {
+        password: newPassword,
+      });
 
-    return res.status(200).json({
-      message: 'Mật khẩu đã được cập nhật thành công',
-    });
+      // Hash và lưu mật khẩu mới vào MongoDB
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({
+        message: 'Mật khẩu đã được cập nhật thành công',
+      });
+    } catch (error) {
+      console.error('Error updating password in Firebase or MongoDB:', error);
+      return res.status(500).json({
+        message: 'Lỗi khi cập nhật mật khẩu',
+        error: error.message,
+      });
+    }
   } catch (error) {
     console.error('Error in updatePassword:', error);
     return res.status(500).json({

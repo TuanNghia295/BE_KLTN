@@ -9,6 +9,8 @@ import {
   resetPassword,
   updatePassword,
 } from '../controllers/authController.js';
+import authUserMiddleware from '../middleware/authMiddleware.js';
+import authAdminMiddleware from '../middleware/authAdminMiddleware.js';
 
 const authRouter = express.Router();
 
@@ -29,7 +31,7 @@ authRouter.post(
 authRouter.post('/login', login);
 authRouter.post('/reset-password', resetPassword);
 authRouter.post('/update-password', updatePassword);
-authRouter.post('/login/admin', loginAdmin);
+authRouter.post('/login/admin', authAdminMiddleware, loginAdmin);
 authRouter.post('/refresh_token', refreshToken);
 authRouter.post('/logout', logout);
 
